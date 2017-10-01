@@ -1,7 +1,6 @@
 
 // ***************************************************************************************************************
 // ** Intel(R) Xeon(R) Processor v3 (Haswell-E/EP) Full Turbo Boost DXE driver
-// ** developed by freecableguy, publically released for free use without any limitation whatsoever (9/30/2017)
 // ***************************************************************************************************************
 
 #include <PiPei.h>
