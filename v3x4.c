@@ -77,7 +77,7 @@ const UINT32 kcpu_domain_3_voltage_offset[MAX_PACKAGE_COUNT] \
 #define	_DOMAIN3_VOLTAGE_ENABLED_					// SAFETY FLAG: enable programming SA voltage offsets, comment out to disable
 
 #define	_TARGET_CPU_CPUID_SIGN_		0x000306F2			// BUILD OPTION: set 0xFFFFFFFF to override and allow to attempt to run for all CPUs (with potentially unknown results)
-																			// note: CPUID for Haswell-E/EP final QS/production silicon is 0x306F2 (Extended Family: 3F, Model: 6, Stepping: 2)
+									// note: CPUID for Haswell-E/EP final QS/production silicon is 0x306F2 (Extended Family: 3F, Model: 6, Stepping: 2)
 
 typedef struct _PLATFORM_OBJECT {
 	UINTN				Packages;			// number of physical processor packages
