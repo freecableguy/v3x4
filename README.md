@@ -1,11 +1,11 @@
 # v3x4
 Intel(R) Xeon(R) Processor v3 (Haswell-E/EP) Full Turbo Boost DXE driver
 
-Description: Unlocks Haswell-E/EP CPUs on X99/C612 platforms to allow for maximum all-core turbo boost for maximum core count.  For example, 18-core Xeon(R) E5-2696 v3 has factory all-core turbo of 2.8GHz; running this DXE allows for 3.8GHz all-core turbo. Allows for undervolting Core, CLR (CBo/LLC/Ring), and System Agent voltage domains independently per package which provides for higher all-core sustained clocks during heavy workloads including AVX2 workloads.  Allows for locking Uncore ratio to maximum performance (typical 30x).
+Description: Unlocks Haswell-E/EP processors (cpuid = 306F2h) on X99 (single) and C612 (dual) platforms to allow for maximum all-core turbo boost for all cores. For example, the 18-core Xeon(R) E5-2696 v3 processor has set from the factory an all-core turbo of 2.8GHz. This driver programs the higest un-fused ratio (i.e. the 1C Turbo bin) as the new Turbo bin for all boost configurations including all-core turbo. In other words, the 1C Turbo bin becomes the all-core Turbo bin and the E5-2696 v3 processor now demonstrates an all-core turbo of 3.8GHz. Allows for dynamically undervolting (retains PCU control while applying a fixed negative Vcore offset) Core, CLR (CBo/LLC/Ring), and System Agent voltage domains independently per package which provides for higher all-core sustained clocks during heavy workloads including AVX2 workloads. Allows for locking Uncore ratio to maximum performance (typical 30x). May work for other Intel Xeon steppings.
 
 Use requirements:
 
--- Haswell-E/EP processor (CPUID = 306F2h). This can be overriden with build flag during compile
+-- Haswell-E/EP processor (cpuid = 306F2h). This can be overriden with build flag during compile
 
 -- CPU microcode revision patch must not be loaded (requires modified BIOS)
   - instructions on how to modify BIOS to remove microcode will not be given here
