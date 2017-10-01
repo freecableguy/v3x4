@@ -10,7 +10,7 @@ Use requirements:
 -- CPU microcode revision patch must not be loaded (requires modified BIOS)
   - instructions on how to modify BIOS to remove microcode will not be given here
 
--- Use EFI Shellx64 to add v3x4.efi
+-- Use EFI Shellx64 to load v3x4.efi during system POST
   - bcfg driver add 0 fs1:\EFI\Boot\v3x4.EFI "V3 Full Turbo" where 'fs1:\EFI\Boot\v3x4.efi' is path to DXE driver file on UEFI boot partition (use 'mountvol x: /s' to mount in Windows as X: for writting)
   - toggle enable/disable in BIOS (if presented as option)
 
