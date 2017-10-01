@@ -4,6 +4,7 @@ Intel(R) Xeon(R) Processor v3 (Haswell-E/EP) Full Turbo Boost DXE driver
 Description: Unlocks Haswell-E/EP CPUs on X99/C612 platforms to allow for maximum all-core turbo boost for maximum core count.  For example, 18-core Xeon(R) E5-2696 v3 has factory all-core turbo of 2.8GHz; running this DXE allows for 3.8GHz all-core turbo.
 
 Use requirements:
+
 -- Haswell-E/EP processor
 
 -- CPU microcode revision patch must not be loaded (requires modified BIOS)
