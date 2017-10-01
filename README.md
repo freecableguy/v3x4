@@ -5,7 +5,7 @@ Description: Unlocks Haswell-E/EP CPUs on X99/C612 platforms to allow for maximu
 
 Use requirements:
 
--- Haswell-E/EP processor
+-- Haswell-E/EP processor (CPUID = 306F2h). This can be overriden with build file during compile
 
 -- CPU microcode revision patch must not be loaded (requires modified BIOS)
   - instructions on how to modify BIOS to remove microcode will not be given here
