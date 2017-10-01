@@ -11,122 +11,122 @@
 #include <Protocol/MpService.h>
 
 // negative dynamic voltage offsets for ALL domains
-#define		_no_offset							0							// no change to factory voltage setting
-#define		_neg_1_mV							0xFFE00000					// -1mV
-#define		_neg_2_mV							0xFFC00000					// -2mV
-#define		_neg_3_mV							0xFFA00000					// -3mV
-#define		_neg_4_mV							0xFF800000					// -4mV
-#define		_neg_5_mV							0xFF600000					// -5mV
-#define		_neg_6_mV							0xFF400000					// -6mV
-#define		_neg_7_mV							0xFF200000					// -7mV
-#define		_neg_8_mV							0xFF000000					// -8mV
-#define		_neg_9_mV							0xFEE00000					// -9mV
-#define		_neg_10_mV							0xFEC00000					// -10mV
-#define		_neg_11_mV							0xFEA00000					// -11mV
-#define		_neg_12_mV							0xFE800000					// -12mV
-#define		_neg_13_mV							0xFE600000					// -13mV
-#define		_neg_14_mV							0xFE400000					// -14mV
-#define		_neg_15_mV							0xFE200000					// -15mV
-#define		_neg_16_mV							0xFE000000					// -16mV
-#define		_neg_17_mV							0xFDE00000					// -17mV
-#define		_neg_18_mV							0xFDC00000					// -18mV
-#define		_neg_19_mV							0xFDA00000					// -19mV
-#define		_neg_20_mV							0xFD800000					// -20mV
-#define		_neg_21_mV							0xFD400000					// -21mV
-#define		_neg_22_mV							0xFD200000					// -22mV
-#define		_neg_23_mV							0xFD000000					// -23mV
-#define		_neg_24_mV							0xFCE00000					// -24mV
-#define		_neg_25_mV							0xFCC00000					// -25mV
-#define		_neg_26_mV							0xFCA00000					// -26mV
-#define		_neg_27_mV							0xFC800000					// -27mV
-#define		_neg_28_mV							0xFC600000					// -28mV
-#define		_neg_29_mV							0xFC400000					// -29mV
-#define		_neg_30_mV							0xFC200000					// -30mV
-#define		_neg_31_mV							0xFC000000					// -31mV
-#define		_neg_32_mV							0xFBE00000					// -32mV
-#define		_neg_33_mV							0xFBC00000					// -33mV
-#define		_neg_34_mV							0xFBA00000					// -34mV
-#define		_neg_35_mV							0xFB800000					// -35mV
-#define		_neg_36_mV							0xFB600000					// -36mV
-#define		_neg_37_mV							0xFB400000					// -37mV
-#define		_neg_38_mV							0xFB200000					// -38mV
-#define		_neg_39_mV							0xFB000000					// -39mV
-#define		_neg_40_mV							0xFAE00000					// -40mV
-#define		_neg_41_mV							0xFAC00000					// -41mV
-#define		_neg_42_mV							0xFAA00000					// -42mV
-#define		_neg_43_mV							0xFA800000					// -43mV
-#define		_neg_44_mV							0xFA600000					// -44mV
-#define		_neg_45_mV							0xFA400000					// -45mV
-#define		_neg_46_mV							0xFA200000					// -46mV
-#define		_neg_47_mV							0xFA000000					// -47mV
-#define		_neg_48_mV							0xF9E00000					// -48mV
-#define		_neg_49_mV							0xF9C00000					// -49mV
-#define		_neg_50_mV							0xF9A00000					// -50mV
-#define		_neg_51_mV							0xF9800000					// -51mV
-#define		_neg_52_mV							0xF9600000					// -52mV
-#define		_neg_53_mV							0xF9400000					// -53mV
-#define		_neg_54_mV							0xF9200000					// -54mV
-#define		_neg_55_mV							0xF9000000					// -55mV
-#define		_neg_56_mV							0xF8E00000					// -56mV
-#define		_neg_57_mV							0xF8C00000					// -57mV
-#define		_neg_58_mV							0xF8A00000					// -58mV
-#define		_neg_59_mV							0xF8800000					// -59mV
-#define		_neg_60_mV							0xF8600000					// -60mV
-#define		_neg_61_mV							0xF8400000					// -61mV
-#define		_neg_62_mV							0xF8200000					// -62mV
-#define		_neg_63_mV							0xF7E00000					// -63mV
-#define		_neg_64_mV							0xF7C00000					// -64mV
-#define		_neg_65_mV							0xF7A00000					// -65mV
-#define		_neg_66_mV							0xF7800000					// -66mV
-#define		_neg_67_mV							0xF7600000					// -67mV
-#define		_neg_68_mV							0xF7400000					// -68mV
-#define		_neg_69_mV							0xF7200000					// -69mV
-#define		_neg_70_mV							0xF7000000					// -70mV
-#define		_neg_71_mV							0xF6E00000					// -71mV
-#define		_neg_72_mV							0xF6C00000					// -72mV
-#define		_neg_73_mV							0xF6A00000					// -73mV
-#define		_neg_74_mV							0xF6800000					// -74mV (same as -75mV)
-#define		_neg_75_mV							0xF6800000					// -75mV (same as -74mV)
-#define		_neg_76_mV							0xF6400000					// -76mV
-#define		_neg_77_mV							0xF6200000					// -77mV
-#define		_neg_78_mV							0xF6000000					// -78mV
-#define		_neg_79_mV							0xF5E00000					// -79mV
-#define		_neg_80_mV							0xF5C00000					// -80mV
-#define		_neg_81_mV							0xF5A00000					// -81mV
-#define		_neg_82_mV							0xF5800000					// -82mV
-#define		_neg_83_mV							0xF5600000					// -83mV
-#define		_neg_84_mV							0xF5400000					// -84mV
-#define		_neg_85_mV							0xF5200000					// -85mV
-#define		_neg_86_mV							0xF5000000					// -86mV
-#define		_neg_87_mV							0xF4E00000					// -87mV
-#define		_neg_88_mV							0xF0C00000					// -88mV
-#define		_neg_89_mV							0xF4A00000					// -89mV
-#define		_neg_90_mV							0xF4800000					// -90mV
-#define		_neg_91_mV							0xF4600000					// -91mV
-#define		_neg_92_mV							0xF4400000					// -92mV
-#define		_neg_93_mV							0xF4200000					// -93mV
-#define		_neg_94_mV							0xF4000000					// -94mV
-#define		_neg_95_mV							0xF3E00000					// -95mV
-#define		_neg_96_mV							0xF3C00000					// -96mV
-#define		_neg_97_mV							0xF3A00000					// -97mV
-#define		_neg_98_mV							0xF3800000					// -98mV
-#define		_neg_99_mV							0xF3600000					// -99mV
-#define		_neg_100_mV							0xF3400000					// -100mV
-#define		_neg_110_mV							0xF1E00000					// -110mV
-#define		_neg_120_mV							0xF0A00000					// -120mV
-#define		_neg_130_mV							0xEF600000					// -130mV
-#define		_neg_140_mV							0xEE200000					// -140mV
-#define		_neg_150_mV							0xECC00000					// -150mV
+#define		_no_offset							0		// no change to factory voltage setting
+#define		_neg_1_mV							0xFFE00000	// -1mV
+#define		_neg_2_mV							0xFFC00000	// -2mV
+#define		_neg_3_mV							0xFFA00000	// -3mV
+#define		_neg_4_mV							0xFF800000	// -4mV
+#define		_neg_5_mV							0xFF600000	// -5mV
+#define		_neg_6_mV							0xFF400000	// -6mV
+#define		_neg_7_mV							0xFF200000	// -7mV
+#define		_neg_8_mV							0xFF000000	// -8mV
+#define		_neg_9_mV							0xFEE00000	// -9mV
+#define		_neg_10_mV							0xFEC00000	// -10mV
+#define		_neg_11_mV							0xFEA00000	// -11mV
+#define		_neg_12_mV							0xFE800000	// -12mV
+#define		_neg_13_mV							0xFE600000	// -13mV
+#define		_neg_14_mV							0xFE400000	// -14mV
+#define		_neg_15_mV							0xFE200000	// -15mV
+#define		_neg_16_mV							0xFE000000	// -16mV
+#define		_neg_17_mV							0xFDE00000	// -17mV
+#define		_neg_18_mV							0xFDC00000	// -18mV
+#define		_neg_19_mV							0xFDA00000	// -19mV
+#define		_neg_20_mV							0xFD800000	// -20mV
+#define		_neg_21_mV							0xFD400000	// -21mV
+#define		_neg_22_mV							0xFD200000	// -22mV
+#define		_neg_23_mV							0xFD000000	// -23mV
+#define		_neg_24_mV							0xFCE00000	// -24mV
+#define		_neg_25_mV							0xFCC00000	// -25mV
+#define		_neg_26_mV							0xFCA00000	// -26mV
+#define		_neg_27_mV							0xFC800000	// -27mV
+#define		_neg_28_mV							0xFC600000	// -28mV
+#define		_neg_29_mV							0xFC400000	// -29mV
+#define		_neg_30_mV							0xFC200000	// -30mV
+#define		_neg_31_mV							0xFC000000	// -31mV
+#define		_neg_32_mV							0xFBE00000	// -32mV
+#define		_neg_33_mV							0xFBC00000	// -33mV
+#define		_neg_34_mV							0xFBA00000	// -34mV
+#define		_neg_35_mV							0xFB800000	// -35mV
+#define		_neg_36_mV							0xFB600000	// -36mV
+#define		_neg_37_mV							0xFB400000	// -37mV
+#define		_neg_38_mV							0xFB200000	// -38mV
+#define		_neg_39_mV							0xFB000000	// -39mV
+#define		_neg_40_mV							0xFAE00000	// -40mV
+#define		_neg_41_mV							0xFAC00000	// -41mV
+#define		_neg_42_mV							0xFAA00000	// -42mV
+#define		_neg_43_mV							0xFA800000	// -43mV
+#define		_neg_44_mV							0xFA600000	// -44mV
+#define		_neg_45_mV							0xFA400000	// -45mV
+#define		_neg_46_mV							0xFA200000	// -46mV
+#define		_neg_47_mV							0xFA000000	// -47mV
+#define		_neg_48_mV							0xF9E00000	// -48mV
+#define		_neg_49_mV							0xF9C00000	// -49mV
+#define		_neg_50_mV							0xF9A00000	// -50mV
+#define		_neg_51_mV							0xF9800000	// -51mV
+#define		_neg_52_mV							0xF9600000	// -52mV
+#define		_neg_53_mV							0xF9400000	// -53mV
+#define		_neg_54_mV							0xF9200000	// -54mV
+#define		_neg_55_mV							0xF9000000	// -55mV
+#define		_neg_56_mV							0xF8E00000	// -56mV
+#define		_neg_57_mV							0xF8C00000	// -57mV
+#define		_neg_58_mV							0xF8A00000	// -58mV
+#define		_neg_59_mV							0xF8800000	// -59mV
+#define		_neg_60_mV							0xF8600000	// -60mV
+#define		_neg_61_mV							0xF8400000	// -61mV
+#define		_neg_62_mV							0xF8200000	// -62mV
+#define		_neg_63_mV							0xF7E00000	// -63mV
+#define		_neg_64_mV							0xF7C00000	// -64mV
+#define		_neg_65_mV							0xF7A00000	// -65mV
+#define		_neg_66_mV							0xF7800000	// -66mV
+#define		_neg_67_mV							0xF7600000	// -67mV
+#define		_neg_68_mV							0xF7400000	// -68mV
+#define		_neg_69_mV							0xF7200000	// -69mV
+#define		_neg_70_mV							0xF7000000	// -70mV
+#define		_neg_71_mV							0xF6E00000	// -71mV
+#define		_neg_72_mV							0xF6C00000	// -72mV
+#define		_neg_73_mV							0xF6A00000	// -73mV
+#define		_neg_74_mV							0xF6800000	// -74mV (same as -75mV)
+#define		_neg_75_mV							0xF6800000	// -75mV (same as -74mV)
+#define		_neg_76_mV							0xF6400000	// -76mV
+#define		_neg_77_mV							0xF6200000	// -77mV
+#define		_neg_78_mV							0xF6000000	// -78mV
+#define		_neg_79_mV							0xF5E00000	// -79mV
+#define		_neg_80_mV							0xF5C00000	// -80mV
+#define		_neg_81_mV							0xF5A00000	// -81mV
+#define		_neg_82_mV							0xF5800000	// -82mV
+#define		_neg_83_mV							0xF5600000	// -83mV
+#define		_neg_84_mV							0xF5400000	// -84mV
+#define		_neg_85_mV							0xF5200000	// -85mV
+#define		_neg_86_mV							0xF5000000	// -86mV
+#define		_neg_87_mV							0xF4E00000	// -87mV
+#define		_neg_88_mV							0xF0C00000	// -88mV
+#define		_neg_89_mV							0xF4A00000	// -89mV
+#define		_neg_90_mV							0xF4800000	// -90mV
+#define		_neg_91_mV							0xF4600000	// -91mV
+#define		_neg_92_mV							0xF4400000	// -92mV
+#define		_neg_93_mV							0xF4200000	// -93mV
+#define		_neg_94_mV							0xF4000000	// -94mV
+#define		_neg_95_mV							0xF3E00000	// -95mV
+#define		_neg_96_mV							0xF3C00000	// -96mV
+#define		_neg_97_mV							0xF3A00000	// -97mV
+#define		_neg_98_mV							0xF3800000	// -98mV
+#define		_neg_99_mV							0xF3600000	// -99mV
+#define		_neg_100_mV							0xF3400000	// -100mV
+#define		_neg_110_mV							0xF1E00000	// -110mV
+#define		_neg_120_mV							0xF0A00000	// -120mV
+#define		_neg_130_mV							0xEF600000	// -130mV
+#define		_neg_140_mV							0xEE200000	// -140mV
+#define		_neg_150_mV							0xECC00000	// -150mV
 
 // Intel CPU Model Specific Registers
 #define		MSR_IA32_BIOS_SIGN_ID				0x08B
-#define		MSR_PLATFORM_INFO					0x0CE
-#define		MSR_OC_MAILBOX						0x150						// no documentation available in the public domain
-#define		MSR_FLEX_RATIO						0x194
+#define		MSR_PLATFORM_INFO				0x0CE
+#define		MSR_OC_MAILBOX					0x150				// no documentation available in the public domain
+#define		MSR_FLEX_RATIO					0x194
 #define		MSR_TURBO_RATIO_LIMIT				0x1AD
 #define		MSR_TURBO_RATIO_LIMIT1 				0x1AE
 #define		MSR_TURBO_RATIO_LIMIT2 				0x1AF
-#define		UNCORE_RATIO_LIMIT					0x620
+#define		UNCORE_RATIO_LIMIT				0x620
 
 // toolbox for OC Mailbox commands - experimental
 #define		OC_MAILBOX_COMMAND_EXEC				0x8000000000000000ull
@@ -135,43 +135,43 @@
 #define		OC_MAILBOX_GET_TURBO_RATIOS			0x0000000200000000ull
 #define		OC_MAILBOX_GET_VID_PARAMS			0x0000001000000000ull
 #define		OC_MAILBOX_SET_VID_PARAMS			0x0000001100000000ull
-#define		OC_MAILBOX_GET_SVID					0x0000001200000000ull
-#define		OC_MAILBOX_SET_SVID					0x0000001300000000ull
-#define		OC_MAILBOX_GET_FIVR					0x0000001400000000ull
-#define		OC_MAILBOX_SET_FIVR					0x0000001500000000ull
+#define		OC_MAILBOX_GET_SVID				0x0000001200000000ull
+#define		OC_MAILBOX_SET_SVID				0x0000001300000000ull
+#define		OC_MAILBOX_GET_FIVR				0x0000001400000000ull
+#define		OC_MAILBOX_SET_FIVR				0x0000001500000000ull
 
-#define		OC_MAILBOX_DOMAIN_0					0x0000000000000000ull		// Core domain
-#define		OC_MAILBOX_DOMAIN_2					0x0000020000000000ull		// CLR (CBo/LLC/Ring) domain
-#define		OC_MAILBOX_DOMAIN_3					0x0000030000000000ull		// System Agent domain
+#define		OC_MAILBOX_DOMAIN_0				0x0000000000000000ull		// Core domain
+#define		OC_MAILBOX_DOMAIN_2				0x0000020000000000ull		// CLR (CBo/LLC/Ring) domain
+#define		OC_MAILBOX_DOMAIN_3				0x0000030000000000ull		// System Agent domain
 
 #define		OC_MAILBOX_RESPONSE_MASK			0x000000FF00000000ull
 #define		OC_MAILBOX_RESPONSE_SUCCESS			0
 
 // general definitions
-#define		BUS_FREQUENCY						100							// placeholder; TO DO: add bus frequency sensing
+#define		BUS_FREQUENCY					100				// placeholder; TO DO: add bus frequency sensing
 
-#define		CPUID_VERSION_INFO					0x00000001
+#define		CPUID_VERSION_INFO				0x00000001
 #define		CPUID_BRAND_STRING_BASE				0x80000002
 #define		CPUID_BRAND_STRING_LEN				48
 
 #define		MSR_FLEX_RATIO_OC_LOCK_BIT			0x0000000000100000ull
-#define		MSR_TURBO_RATIO_SEMAPHORE_BIT		0x8000000000000000ull
+#define		MSR_TURBO_RATIO_SEMAPHORE_BIT			0x8000000000000000ull
 
-#define		MAX_PACKAGE_COUNT					4							// maximum number of packages supported by the build
+#define		MAX_PACKAGE_COUNT				4				// maximum number of packages supported by the build
 
 // ***EDIT HERE*** Build options ***EDIT HERE***
-#define		_VERBOSE_OUTPUT_												// more verbose console outputs, comment out to disable
+#define		_VERBOSE_OUTPUT_								// more verbose console outputs, comment out to disable
 
-#define		_SET_OVERCLOCKING_LOCK_											// set MSR 0x194[0x20] to prevent any further changes, comment out to disable
+#define		_SET_OVERCLOCKING_LOCK_								// set MSR 0x194[0x20] to prevent any further changes, comment out to disable
 
-#define		_DOMAIN0_CLOCKING_ENABLED_										// SAFETY FLAG: enable Core ratios to maximum turbo (all-core turbo) for maximum performance, comment out to disable
-#define		_DOMAIN2_CLOCKING_ENABLED_										// SAFETY FLAG: enable set static Uncore ratio to maximum performance, comment out to disble
+#define		_DOMAIN0_CLOCKING_ENABLED_							// SAFETY FLAG: enable Core ratios to maximum turbo (all-core turbo) for maximum performance, comment out to disable
+#define		_DOMAIN2_CLOCKING_ENABLED_							// SAFETY FLAG: enable set static Uncore ratio to maximum performance, comment out to disble
 
-#define		_DOMAIN0_VOLTAGE_ENABLED_										// SAFETY FLAG: enable programming Core voltages offset, comment out to disable
-#define		_DOMAIN2_VOLTAGE_ENABLED_										// SAFETY FLAG: enable programming CLR voltage offset, comment out to disable
-#define		_DOMAIN3_VOLTAGE_ENABLED_										// SAFETY FLAG: enable programming SA voltage offset, comment out to disable
+#define		_DOMAIN0_VOLTAGE_ENABLED_							// SAFETY FLAG: enable programming Core voltages offset, comment out to disable
+#define		_DOMAIN2_VOLTAGE_ENABLED_							// SAFETY FLAG: enable programming CLR voltage offset, comment out to disable
+#define		_DOMAIN3_VOLTAGE_ENABLED_							// SAFETY FLAG: enable programming SA voltage offset, comment out to disable
 
-#define		TARGET_CPU_CPUID_SIGN				0x000306F2					// CPUID for Haswell-E/EP final QS/production silicon is 0x306F2 (Extended Family: 3F, Model: 6, Stepping: 2)
+#define		TARGET_CPU_CPUID_SIGN				0x000306F2			// CPUID for Haswell-E/EP final QS/production silicon is 0x306F2 (Extended Family: 3F, Model: 6, Stepping: 2)
 																			// set 0xFFFFFFFF to override and allow to attempt to run for all CPUs (warning: can cause system freeze at POST)
 
 // ***EDIT HERE*** CPU dynamic voltage offsets by domain in order of Package ***EDIT HERE***
@@ -190,36 +190,36 @@ const UINT32 kcpu_domain_3_voltage_offset[MAX_PACKAGE_COUNT] \
 
 // System Topology object
 typedef struct _SYSTEM_TOPOLOGY_OBJECT {
-	UINTN						Packages;									// number of physical processor packages
-	UINTN						LogicalProcessors;							// total number of logical processors
-	UINTN						EnabledLogicalProcessors;					// total number of enabled logical processors
-	UINTN						Cores[MAX_PACKAGE_COUNT];					// number cores in the package
-	UINTN						APICID[MAX_PACKAGE_COUNT];					// logical processor number for programming/unlocking
-	UINTN						HyperThreading;								// 0 = HyperThreading disabled, 1 = HyperThreading enabled
+	UINTN						Packages;				// number of physical processor packages
+	UINTN						LogicalProcessors;			// total number of logical processors
+	UINTN						EnabledLogicalProcessors;		// total number of enabled logical processors
+	UINTN						Cores[MAX_PACKAGE_COUNT];		// number cores in the package
+	UINTN						APICID[MAX_PACKAGE_COUNT];		// logical processor number for programming/unlocking
+	UINTN						HyperThreading;				// 0 = HyperThreading disabled, 1 = HyperThreading enabled
 } SYSTEM_TOPOLOGY_OBJECT, *PSYSTEM_TOPOLOGY_OBJECT;
 
 // Processor Package object
 typedef struct _PROCESSOR_PACKAGE_OBJECT {
-	UINTN						MinFreqModeRatio;							// Minimum Frequency Mode (MFM) "Low Power Mode" (LPM)
-	UINTN						LowFreqModeRatio;							// Low Frequency Mode (LFM), minimum non-turbo Core multiplier
-	UINTN						HighFreqModeRatio;							// High Frequecy Mode (HFM), maximum non-turbo Core multiplier
-	UINTN						MaxTurboRatio;								// maximum (1C) turbo Core multiplier
-	UINTN						MaxUncoreRatio;								// maximum Uncore multiplier
-	UINT32						ProcessorCPUID;								// CPUID
-	CHAR16						BrandNameString[100];						// Processor Brand Name string (16-bit UNICODE)
+	UINTN						MinFreqModeRatio;			// Minimum Frequency Mode (MFM) "Low Power Mode" (LPM)
+	UINTN						LowFreqModeRatio;			// Low Frequency Mode (LFM), minimum non-turbo Core multiplier
+	UINTN						HighFreqModeRatio;			// High Frequecy Mode (HFM), maximum non-turbo Core multiplier
+	UINTN						MaxTurboRatio;				// maximum (1C) turbo Core multiplier
+	UINTN						MaxUncoreRatio;				// maximum Uncore multiplier
+	UINT32						ProcessorCPUID;				// CPUID
+	CHAR16						BrandNameString[100];			// Processor Brand Name string (16-bit UNICODE)
 } PROCESSOR_PACKAGE_OBJECT, *PPROCESSOR_PACKAGE_OBJECT;
 
 // driver specific device extension object
 typedef struct _V3DRIVER_DEVICE_EXTENTION {
-	PSYSTEM_TOPOLOGY_OBJECT		SystemTopology;								// System Topology object
-	PPROCESSOR_PACKAGE_OBJECT	ProcessorPackage;							// array of Processor Package objects
-	UINTN						BootstrapProcessor;							// bootstrap processor assignment at driver entry
-	UINTN						NextPackage;								// package number of next package to be programmed/unlocked
+	PSYSTEM_TOPOLOGY_OBJECT		SystemTopology;						// System Topology object
+	PPROCESSOR_PACKAGE_OBJECT	ProcessorPackage;					// array of Processor Package objects
+	UINTN						BootstrapProcessor;			// bootstrap processor assignment at driver entry
+	UINTN						NextPackage;				// package number of next package to be programmed/unlocked
 } V3DRIVER_DEVICE_EXTENTION, *PV3DRIVER_DEVICE_EXTENTION;
 
 // global variables
-EFI_MP_SERVICES_PROTOCOL		*MpServicesProtocol;						// ptr to MP Services Protocol
-V3DRIVER_DEVICE_EXTENTION		*DeviceExtension;							// ptr to device extension
+EFI_MP_SERVICES_PROTOCOL		*MpServicesProtocol;					// ptr to MP Services Protocol
+V3DRIVER_DEVICE_EXTENTION		*DeviceExtension;					// ptr to device extension
 
 // function prototypes
 EFI_STATUS	EFIAPI InitSystem(IN OUT PSYSTEM_TOPOLOGY_OBJECT *SystemTopologyObject);
@@ -506,7 +506,8 @@ EnumProcessors(
 			);
 
 		// throw error if does not match target CPUID (unless override set)
-		if ((ProcessorPackage[processor_index].ProcessorCPUID != TARGET_CPU_CPUID_SIGN) && (TARGET_CPU_CPUID_SIGN != 0xFFFFFFFF)) {
+		if ((ProcessorPackage[processor_index].ProcessorCPUID != TARGET_CPU_CPUID_SIGN) && \
+			(TARGET_CPU_CPUID_SIGN != 0xFFFFFFFF)) {
 			Print(
 				L"Error: CPU%d Processor CPUID (0x%x) not equal to 0x%x\r\n\0",
 				processor_index,
