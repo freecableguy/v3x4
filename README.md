@@ -5,7 +5,7 @@ Description: Programs Haswell-E/EP Xeon(R) processors (cpuid = 306F2h) on X99 (s
 
 Sucessful use requirements:
 
--- Haswell-E/EP processor (cpuid = 306F2h). This can be overriden with special build flag at compile time
+-- Haswell-E/EP processor (cpuid = 306F2h) or processors. This can be overriden with special build flag at compile time
 
 -- CPU microcode revision patch must not be loaded (requires modified BIOS)
   - instructions on how to modify BIOS to remove microcode will not be provieded here
