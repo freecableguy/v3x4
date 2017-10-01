@@ -10,8 +10,11 @@ In Windows, to compile, you will need:
 3) In file [UDK2015]\BaseTools\Conf\target.txt change next parameters to:
 
 ACTIVE_PLATFORM = MdeModulePkg/MdeModulePkg.dsc
+
 TARGET = RELEASE
+
 TARGET_ARCH = X64
+
 TOOL_CHAIN_TAG = VS2015x86 (or VS2013x86, etc.)
 
 4) open command prompt (admin0, go to folder [UDK2015]\BaseTools
