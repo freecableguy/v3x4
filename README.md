@@ -44,15 +44,11 @@ TOOL_CHAIN_TAG = VS2015x86 (or VS2013x86, etc.)
 
 5) Execute edksetup(.bat)
 
-6) Execute build
-
-If it prints "- Done -" all is fine and the UDK2015 build environment is properly setup  ...
+6) Execute build. If it prints "- Done -" all is fine and the UDK2015 build environment is properly setup  ...
  
-7) unpack source into [UDK2015]/BaseTools/MdeModulePkg/v3x4
+7) Unpack/copy source into [UDK2015]/BaseTools/MdeModulePkg/v3x4 (create this subdirectory)
 
-8) Edit file [UDK2015]/BaseTools/MdeModulePkg/MdeModulePkg.dsc, in section [Components], add string MdeModulePkg/v3x4/v3x4.inf
+8) Edit file [UDK2015]/BaseTools/MdeModulePkg/MdeModulePkg.dsc and "MdeModulePkg/v3x4/v3x4.inf" to [Components] section
 
-9) Execute build again
-
-10) Wait for "- Done -" and take compiled EFI DXE driver from
+9) Execute build again. Wait for "- Done -" and take compiled EFI DXE driver from:
 [UDK2015]/BaseTools/Build/MdeModule/RELEASE_VS2015x86/X64/MdeModulePkg/v3x4/v3x4/OUTPUT/v3x4.efi
