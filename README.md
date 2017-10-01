@@ -39,7 +39,7 @@ TARGET_ARCH = X64
 
 TOOL_CHAIN_TAG = VS2015x86 (or VS2013x86, etc.)
 
-4) open command prompt (admin0, go to folder [UDK2015]\BaseTools
+4) open command prompt (as admin) and go to folder [UDK2015]\BaseTools
 
 5) execute edksetup.bat
 
