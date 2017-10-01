@@ -27,7 +27,7 @@ TOOL_CHAIN_TAG = VS2015x86 (or VS2013x86, etc.)
 6) execute build
 
 If it prints - Done - all is fine and UDK2015 is functioning properly...
-
+ 
 7) unpack source into [UDK2015]\BaseTools\MdeModulePkg\v3x4
 8) in file [UDK2015]\BaseTools\MdeModulePkg\MdeModulePkg.dsc, in section [Components], add string MdeModulePkg/v3x4/v3x4.inf
 9) execute build again
