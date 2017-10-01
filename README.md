@@ -15,8 +15,8 @@ Sucessful use requirements:
   - toggle enable/disable in BIOS (if presented as an option; default: enabled)
 
 "Features":
-- Programming MSRs can be a fickle thing... you may see BSOD during boot immediately following toggle enable/disable or other situations where you attempt to write to locked MSRs during runtime (e.g. in OS).  Don't panic... a cold reboot if often the cure.
-- If you program too low an offset voltage for any of the enabled domains, this is the equivalent of setting too low a VID in BIOS and expecting the system to be remain stable. Since this is always done (no recovery), then to recover you would need to temporarily disconnect the disk source for the drive binary. Similiar to the trial-and-error method of overclocking, so will there be here, too.
+- Programming MSRs can be a fickle thing... you may see BSOD during boot immediately following toggle enable/disable or other situations where you attempt to write to locked MSRs during runtime (e.g. in OS).  Don't panic... a cold reboot is often the cure.
+- If you program too low an offset voltage for any of the enabled domains, this is the equivalent of setting too low a VID in BIOS and expecting your system to be remain stable. Since this is always done (no recovery), then to recover you would need to temporarily disconnect the disk source for the drive binary (preventing load with automatic bypass). Similiar to the trial-and-error method of overclocking, so will there be here, too.
 - Driver will abort if microcode revision update patch detected and there is no point in defeating this feature as this is a hard requirement for sucessful driver execution.
 - Driver will abort if not expected CPUID. This can be programmed to whatever you want or entirely overridden using special build flags at compile time. At this time, only Haswell-E/EP has been verified workable.
 
