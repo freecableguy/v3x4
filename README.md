@@ -5,31 +5,43 @@ Functionality:
 -- Unlocks Haswell-E/EP CPUs on X99/C612 platforms to allow for maximum all-core turbo boost for maximum core count.  For example, 18-core Xeon(R) E5-2696 v3 has factory all-core turbo of 2.8GHz; running this DXE allows for 3.8GHz all-core turbo.
 
 Requirements:
+
 -- CPU microcode revision patch must not be loaded (requires modified BIOS)
   - instructions on how to modify BIOS to remove microcode will not be given here
+
 -- Use EFI Shellx64 to add v3x4.efi
   - bcfg driver add 0 fs1:\EFI\Boot\v3x4.EFI "V3 Full Turbo" where 'fs1:\EFI\Boot\v3x4.efi' is path to DXE driver UEFI boot partition
-  - toggle enable/disable in BIOS /9if presented as option)
+  - toggle enable/disable in BIOS (if presented as option)
 
 To compile for point-releases, in Windows you will need:
 
 1) UDK2015: http://www.tianocore.org/udk/udk2015/
+
 2) Any C-compiler that is supported by UDK2015. Currently verified working with Visual Studio 2015.
+
 3) In file [UDK2015]\BaseTools\Conf\target.txt change next parameters to:
 
 ACTIVE_PLATFORM = MdeModulePkg/MdeModulePkg.dsc
+
 TARGET = RELEASE
+
 TARGET_ARCH = X64
+
 TOOL_CHAIN_TAG = VS2015x86 (or VS2013x86, etc.)
 
 4) open command prompt (admin0, go to folder [UDK2015]\BaseTools
+
 5) execute edksetup.bat
+
 6) execute build
 
 If it prints - Done - all is fine and UDK2015 is functioning properly...
  
 7) unpack source into [UDK2015]\BaseTools\MdeModulePkg\v3x4
+
 8) in file [UDK2015]\BaseTools\MdeModulePkg\MdeModulePkg.dsc, in section [Components], add string MdeModulePkg/v3x4/v3x4.inf
+
 9) execute build again
+
 10) wait for - Done - and take compiled EFI DVX driver from
 [UDK2015]\BaseTools\Build\MdeModule\RELEASE_VS2013x86\X64\MdeModulePkg\v3x4\v3x4\OUTPUT\v3x4.efi
