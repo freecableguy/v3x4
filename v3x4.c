@@ -5,53 +5,53 @@
 #include <Protocol/MpService.h>
 
 // general definitions
-#define		MAX_PACKAGE_COUNT		4			// maximum number of packages supported by the build
-#define		BUS_FREQUENCY			100			// placeholder; TO DO: add bus frequency sensing
-#define		CPUID_VERSION_INFO		0x00000001
-#define		CPUID_BRAND_STRING_BASE		0x80000002
-#define		CPUID_BRAND_STRING_LEN		48
+#define	MAX_PACKAGE_COUNT		4				// maximum number of packages supported by the build
+#define	BUS_FREQUENCY			100				// placeholder; TO DO: add bus frequency sensing
+#define	CPUID_VERSION_INFO		0x00000001
+#define	CPUID_BRAND_STRING_BASE		0x80000002
+#define	CPUID_BRAND_STRING_LEN		48
 
 // Model Specific Registers
-#define		MSR_IA32_BIOS_SIGN_ID		0x0000008B
-#define		MSR_PLATFORM_INFO		0x000000CE
-#define		MSR_OC_MAILBOX			0x00000150		// no documentation available in the public domain
-#define		MSR_FLEX_RATIO			0x00000194
-#define		MSR_TURBO_RATIO_LIMIT		0x000001AD
-#define		MSR_TURBO_RATIO_LIMIT1 		0x000001AE
-#define		MSR_TURBO_RATIO_LIMIT2 		0x000001AF
-#define		UNCORE_RATIO_LIMIT		0x00000620
+#define	MSR_IA32_BIOS_SIGN_ID		0x0000008B
+#define	MSR_PLATFORM_INFO		0x000000CE
+#define	MSR_OC_MAILBOX			0x00000150			// no documentation available in the public domain
+#define	MSR_FLEX_RATIO			0x00000194
+#define	MSR_TURBO_RATIO_LIMIT		0x000001AD
+#define	MSR_TURBO_RATIO_LIMIT1 		0x000001AE
+#define	MSR_TURBO_RATIO_LIMIT2 		0x000001AF
+#define	UNCORE_RATIO_LIMIT		0x00000620
 
 // MSR status bits
-#define		MSR_FLEX_RATIO_OC_LOCK_BIT	0x0000000000100000ull	// set to lock MSR 0x194 (RO until reboot)
-#define		MSR_TURBO_RATIO_SEMAPHORE_BIT	0x8000000000000000ull	// set to execute changes writen to MSR 0x1AD, 0x1AE, 0x1A 
+#define	MSR_FLEX_RATIO_OC_LOCK_BIT	0x0000000000100000ull		// set to lock MSR 0x194 (RO until reboot)
+#define	MSR_TURBO_RATIO_SEMAPHORE_BIT	0x8000000000000000ull		// set to execute changes writen to MSR 0x1AD, 0x1AE, 0x1A 
 
 // toolbox for OC Mailbox
-#define		OC_MAILBOX_COMMAND_EXEC		0x8000000000000000ull
-#define		OC_MAILBOX_GET_CPU_CAPS		0x0000000100000000ull
-#define		OC_MAILBOX_SET_VID_PARAMS	0x0000001100000000ull
-#define		OC_MAILBOX_DOMAIN_0		0x0000000000000000ull	// Core domain
-#define		OC_MAILBOX_DOMAIN_2		0x0000020000000000ull	// CLR (CBo/LLC/Ring) domain
-#define		OC_MAILBOX_DOMAIN_3		0x0000030000000000ull	// System Agent domain
-#define		OC_MAILBOX_RESPONSE_MASK	0x000000FF00000000ull
-#define		OC_MAILBOX_RESPONSE_SUCCESS	0
+#define	OC_MAILBOX_COMMAND_EXEC		0x8000000000000000ull
+#define	OC_MAILBOX_GET_CPU_CAPS		0x0000000100000000ull
+#define	OC_MAILBOX_SET_VID_PARAMS	0x0000001100000000ull
+#define	OC_MAILBOX_DOMAIN_0		0x0000000000000000ull		// Core domain
+#define	OC_MAILBOX_DOMAIN_2		0x0000020000000000ull		// CLR (CBo/LLC/Ring) domain
+#define	OC_MAILBOX_DOMAIN_3		0x0000030000000000ull		// System Agent domain
+#define	OC_MAILBOX_RESPONSE_MASK	0x000000FF00000000ull
+#define	OC_MAILBOX_RESPONSE_SUCCESS	0
 
 // negative dynamic voltage offsets for all domains
-#define		_no_offset			0			// no change to factory voltage setting
-#define		_neg_10_mV			0xFEC00000		// -10mV
-#define		_neg_20_mV			0xFD800000		// -20mV
-#define		_neg_30_mV			0xFC200000		// -30mV
-#define		_neg_40_mV			0xFAE00000		// -40mV
-#define		_neg_50_mV			0xF9A00000		// -50mV
-#define		_neg_60_mV			0xF8600000		// -60mV
-#define		_neg_70_mV			0xF7000000		// -70mV
-#define		_neg_80_mV			0xF5C00000		// -80mV
-#define		_neg_90_mV			0xF4800000		// -90mV
-#define		_neg_100_mV			0xF3400000		// -100mV
-#define		_neg_110_mV			0xF1E00000		// -110mV
-#define		_neg_120_mV			0xF0A00000		// -120mV
-#define		_neg_130_mV			0xEF600000		// -130mV
-#define		_neg_140_mV			0xEE200000		// -140mV
-#define		_neg_150_mV			0xECC00000		// -150mV
+#define	_no_offset			0				// no change to factory voltage setting
+#define	_neg_10_mV			0xFEC00000			// -10mV
+#define	_neg_20_mV			0xFD800000			// -20mV
+#define	_neg_30_mV			0xFC200000			// -30mV
+#define	_neg_40_mV			0xFAE00000			// -40mV
+#define	_neg_50_mV			0xF9A00000			// -50mV
+#define	_neg_60_mV			0xF8600000			// -60mV
+#define	_neg_70_mV			0xF7000000			// -70mV
+#define	_neg_80_mV			0xF5C00000			// -80mV
+#define	_neg_90_mV			0xF4800000			// -90mV
+#define	_neg_100_mV			0xF3400000			// -100mV
+#define	_neg_110_mV			0xF1E00000			// -110mV
+#define	_neg_120_mV			0xF0A00000			// -120mV
+#define	_neg_130_mV			0xEF600000			// -130mV
+#define	_neg_140_mV			0xEE200000			// -140mV
+#define	_neg_150_mV			0xECC00000			// -150mV
 
 // ***EDIT HERE*** CPU dynamic voltage offsets by domain in order of Package ***EDIT HERE***
 
@@ -68,15 +68,15 @@ const UINT32 kcpu_domain_3_voltage_offset[MAX_PACKAGE_COUNT] \
 	= { _neg_50_mV, _neg_50_mV, _no_offset, _no_offset };  
 
 // ***EDIT HERE*** Build options ***EDIT HERE***
-#define		_VERBOSE_OUTPUT_					// OPTION FLAG: more verbose console outputs during driver execute, comment out to disable
-#define		_SET_OVERCLOCKING_LOCK_					// OPTION FLAG: set MSR 0x194[0x20] to prevent any changes following driver exit, comment out to disable
-#define		_DOMAIN0_CLOCKING_ENABLED_				// FUNCTION FLAG: enable Core ratios to maximum turbo (all-core turbo) for maximum performance, comment out to disable
-#define		_DOMAIN2_CLOCKING_ENABLED_				// FUNCTION FLAG: enable set static Uncore ratio to maximum performance, comment out to disble
-#define		_DOMAIN0_VOLTAGE_ENABLED_				// SAFETY FLAG: enable programming Core voltages offsets, comment out to disable
-#define		_DOMAIN2_VOLTAGE_ENABLED_				// SAFETY FLAG: enable programming CLR voltage offsets, comment out to disable
-#define		_DOMAIN3_VOLTAGE_ENABLED_				// SAFETY FLAG: enable programming SA voltage offsets, comment out to disable
+#define	_VERBOSE_OUTPUT_						// OPTION FLAG: more verbose console outputs during driver execute, comment out to disable
+#define	_SET_OVERCLOCKING_LOCK_						// OPTION FLAG: set MSR 0x194[0x20] to prevent any changes following driver exit, comment out to disable
+#define	_DOMAIN0_CLOCKING_ENABLED_					// FUNCTION FLAG: enable Core ratios to maximum turbo (all-core turbo) for maximum performance, comment out to disable
+#define	_DOMAIN2_CLOCKING_ENABLED_					// FUNCTION FLAG: enable set static Uncore ratio to maximum performance, comment out to disble
+#define	_DOMAIN0_VOLTAGE_ENABLED_					// SAFETY FLAG: enable programming Core voltages offsets, comment out to disable
+#define	_DOMAIN2_VOLTAGE_ENABLED_					// SAFETY FLAG: enable programming CLR voltage offsets, comment out to disable
+#define	_DOMAIN3_VOLTAGE_ENABLED_					// SAFETY FLAG: enable programming SA voltage offsets, comment out to disable
 
-#define		_TARGET_CPU_CPUID_SIGN_		0x000306F2		// BUILD OPTION: set 0xFFFFFFFF to override and allow to attempt to run for all CPUs (with potentially unknown results)
+#define	_TARGET_CPU_CPUID_SIGN_		0x000306F2			// BUILD OPTION: set 0xFFFFFFFF to override and allow to attempt to run for all CPUs (with potentially unknown results)
 																			// note: CPUID for Haswell-E/EP final QS/production silicon is 0x306F2 (Extended Family: 3F, Model: 6, Stepping: 2)
 
 typedef struct _PLATFORM_OBJECT {
