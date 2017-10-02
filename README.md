@@ -11,7 +11,7 @@ Description:
 
 - Driver is designed to work on up to 4-way SMP system. Verified functional on 2-way E5-2696 v3 on ASUS Z10PE-D8 WS with accompanying modified BIOS (remove an microcode revision update patches).
 
-- May work for other Intel Xeon processor types/steppings including Broadwell-E/EP (untested as of yet), and possibly even IVY-E/EP  and SNB-E/EP (also, untested as of yet).
+- May work for other Intel Xeon processor types/steppings including Broadwell-E/EP (untested as of yet), and possibly even SKY-E/EP (also, untested as of yet).
 
 Successful use requirements:
 
