@@ -5,7 +5,7 @@ Description:
 
 - Programs Haswell-E/EP Xeon(R) processors (cpuid = 306F2h) on X99 (single) and C612 (dual) platforms to allow for maximum all-core turbo boost for all cores regardless of whether there are motherboard options present for overclocking/voltage control or not. For example, the 18-core Xeon(R) E5-2696 v3 processor has set from the factory an all-core turbo of 2.8GHz. This driver programs the highest un-fused ratio (i.e. the 1C Turbo bin) as the new Turbo bin for all boost configurations including all-core turbo. In other words, the 1C turbo bin becomes the all-core turbo bin and the E5-2696 v3 processor now demonstrates an all-core turbo of 3.8GHz!
 
-- Allows for dynamically undervolting (retains PCU control while applying a fixed negative Vcore offset) IA (i.e. Core), CLR (CBo/LLC/Ring), and System Agent (i.e. Uncore) voltage domains independently per package which provides for higher all-core sustained clocks during heavy workloads, including AVX2 workloads.
+- Allows for per-package, dynamic undervolting (retains PCU control while applying a fixed negative Vcore offset) IA (i.e. Core), CLR (CBo/LLC/Ring), and System Agent (i.e. Uncore) voltage domains independently which provides for higher all-core sustained clocks during heavy workloads, including AVX2 workloads.
 
 - Allows for setting static Uncore ratio (typical 30x) for maximum performance (lowest typical access latency and accompanying maximum throughput).
 
