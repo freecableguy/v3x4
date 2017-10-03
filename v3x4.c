@@ -5,113 +5,114 @@
 #include <Protocol/MpService.h>
 
 // general definitions
-#define		MAX_PACKAGE_COUNT				4			// maximum number of packages supported by the build
-#define		BUS_FREQUENCY					100			// placeholder; TO DO: add bus frequency sensing
-#define		CPUID_VERSION_INFO				0x00000001
-#define		CPUID_BRAND_STRING_BASE				0x80000002
-#define		CPUID_BRAND_STRING_LEN				48
+#define		MAX_PACKAGE_COUNT			4			// maximum number of supported packages/sockets
+#define		BUS_FREQUENCY				100							
+#define		CPUID_VERSION_INFO			0x00000001
+#define		CPUID_BRAND_STRING_BASE			0x80000002
+#define		CPUID_BRAND_STRING_LEN			0x30
+#define		AP_EXEC_TIMEOUT				1000000			// 1 second
 
 // Model Specific Registers
-#define		MSR_IA32_BIOS_SIGN_ID				0x0000008B
-#define		MSR_PLATFORM_INFO				0x000000CE
-#define		MSR_OC_MAILBOX					0x00000150		// no documentation available in the public domain
-#define		MSR_FLEX_RATIO					0x00000194
-#define		MSR_TURBO_RATIO_LIMIT				0x000001AD
-#define		MSR_TURBO_RATIO_LIMIT1 				0x000001AE
-#define		MSR_TURBO_RATIO_LIMIT2 				0x000001AF
-#define		UNCORE_RATIO_LIMIT				0x00000620
+#define		MSR_IA32_BIOS_SIGN_ID			0x0000008B
+#define		MSR_PLATFORM_INFO			0x000000CE
+#define		MSR_OC_MAILBOX				0x00000150		// no documentation available in the public domain
+#define		MSR_FLEX_RATIO				0x00000194
+#define		MSR_TURBO_RATIO_LIMIT			0x000001AD
+#define		MSR_TURBO_RATIO_LIMIT1 			0x000001AE
+#define		MSR_TURBO_RATIO_LIMIT2 			0x000001AF
+#define		UNCORE_RATIO_LIMIT			0x00000620
 
 // MSR status bits
-#define		MSR_FLEX_RATIO_OC_LOCK_BIT			0x0000000000100000ull	// set to lock MSR 0x194 (RO until reboot)
-#define		MSR_TURBO_RATIO_SEMAPHORE_BIT			0x8000000000000000ull	// set to execute changes writen to MSR 0x1AD, 0x1AE, 0x1A 
+#define		MSR_FLEX_RATIO_OC_LOCK_BIT		0x0000000000100000ull	// set to lock MSR 0x194 (RO until reset)
+#define		MSR_TURBO_RATIO_SEMAPHORE_BIT		0x8000000000000000ull	// set to execute changes writen to MSR 0x1AD, 0x1AE, 0x1AF
 
-// toolbox for OC Mailbox
-#define		OC_MAILBOX_COMMAND_EXEC				0x8000000000000000ull
-#define		OC_MAILBOX_GET_CPU_CAPS				0x0000000100000000ull
-#define		OC_MAILBOX_SET_VID_PARAMS			0x0000001100000000ull
-#define		OC_MAILBOX_DOMAIN_0				0x0000000000000000ull	// Core domain
-#define		OC_MAILBOX_DOMAIN_2				0x0000020000000000ull	// CLR (CBo/LLC/Ring) domain
-#define		OC_MAILBOX_DOMAIN_3				0x0000030000000000ull	// System Agent (Uncore) domain
-#define		OC_MAILBOX_RESPONSE_MASK			0x000000FF00000000ull
-#define		OC_MAILBOX_RESPONSE_SUCCESS			0
+// toolbox for OC Mailbox (experimental)
+#define		OC_MAILBOX_COMMAND_EXEC			0x8000000000000000ull
+#define		OC_MAILBOX_GET_CPU_CAPS			0x0000000100000000ull
+#define		OC_MAILBOX_SET_VID_PARAMS		0x0000001100000000ull
+#define		OC_MAILBOX_DOMAIN_0			0x0000000000000000ull	// IA (Core) domain
+#define		OC_MAILBOX_DOMAIN_2			0x0000020000000000ull	// CLR (CBo/LLC/Ring) domain
+#define		OC_MAILBOX_DOMAIN_3			0x0000030000000000ull	// System Agent (Uncore) domain
+#define		OC_MAILBOX_RESPONSE_MASK		0x000000FF00000000ull
+#define		OC_MAILBOX_RESPONSE_SUCCESS		0
 
 // negative dynamic voltage offsets for all domains
-#define		_no_offset					0			// no change to factory voltage setting
-#define		_neg_10_mV					0xFEC00000		// -10mV
-#define		_neg_20_mV					0xFD800000		// -20mV
-#define		_neg_30_mV					0xFC200000		// -30mV
-#define		_neg_40_mV					0xFAE00000		// -40mV
-#define		_neg_50_mV					0xF9A00000		// -50mV
-#define		_neg_60_mV					0xF8600000		// -60mV
-#define		_neg_70_mV					0xF7000000		// -70mV
-#define		_neg_80_mV					0xF5C00000		// -80mV
-#define		_neg_90_mV					0xF4800000		// -90mV
-#define		_neg_100_mV					0xF3400000		// -100mV
-#define		_neg_110_mV					0xF1E00000		// -110mV
-#define		_neg_120_mV					0xF0A00000		// -120mV
-#define		_neg_130_mV					0xEF600000		// -130mV
-#define		_neg_140_mV					0xEE200000		// -140mV
-#define		_neg_150_mV					0xECC00000		// -150mV
+#define		_no_offset				0			// no change to factory voltage setting
+#define		_neg_10_mV				0xFEC00000		// -10 mV
+#define		_neg_20_mV				0xFD800000		// -20 mV
+#define		_neg_30_mV				0xFC200000		// -30 mV
+#define		_neg_40_mV				0xFAE00000		// -40 mV
+#define		_neg_50_mV				0xF9A00000		// -50 mV
+#define		_neg_60_mV				0xF8600000		// -60 mV
+#define		_neg_70_mV				0xF7000000		// -70 mV
+#define		_neg_80_mV				0xF5C00000		// -80 mV
+#define		_neg_90_mV				0xF4800000		// -90 mV
+#define		_neg_100_mV				0xF3400000		// -100 mV
+#define		_neg_110_mV				0xF1E00000		// -110 mV
+#define		_neg_120_mV				0xF0A00000		// -120 mV
+#define		_neg_130_mV				0xEF600000		// -130 mV
+#define		_neg_140_mV				0xEE200000		// -140 mV
+#define		_neg_150_mV				0xECC00000		// -150 mV
 
 // ***EDIT HERE*** CPU dynamic voltage offsets by domain in order of Package ***EDIT HERE***
 
 // Core dynamic voltage offsets
 const UINT32 kcpu_domain_0_voltage_offset[MAX_PACKAGE_COUNT] \
-	= { _no_offset, _no_offset, _no_offset, _no_offset };
+	= { _neg_90_mV, _neg_90_mV, _no_offset, _no_offset };
 
 // CLR (CBo/LLC/Ring) dynamic voltage offsets
 const UINT32 kcpu_domain_2_voltage_offset[MAX_PACKAGE_COUNT] \
-	= { _no_offset, _no_offset, _no_offset, _no_offset };
+	= { _neg_50_mV, _neg_50_mV, _no_offset, _no_offset };
 
 // System Agent dynamic voltage offsets
 const UINT32 kcpu_domain_3_voltage_offset[MAX_PACKAGE_COUNT] \
 	= { _no_offset, _no_offset, _no_offset, _no_offset };
 
 // ***EDIT HERE*** Build options ***EDIT HERE***
-#define		_VERBOSE_OUTPUT_							// OPTION FLAG: more verbose console outputs during driver execute, comment out to disable
-#define		_SET_OVERCLOCKING_LOCK_							// OPTION FLAG: set MSR 0x194[0x20] to prevent any later changes to this MSR, comment out to disable
-#define		_DOMAIN0_CLOCKING_ENABLED_						// FUNCTION FLAG: enable Core ratios to maximum turbo (all-core turbo) for maximum performance, comment out to disable
-#define		_DOMAIN2_CLOCKING_ENABLED_						// FUNCTION FLAG: enable set static Uncore ratio to maximum performance, comment out to disble
-//#define		_DOMAIN0_VOLTAGE_ENABLED_						// SAFETY FLAG: enable programming Core voltages offsets, comment out to disable
-//#define		_DOMAIN2_VOLTAGE_ENABLED_						// SAFETY FLAG: enable programming CLR voltage offsets, comment out to disable
-//#define		_DOMAIN3_VOLTAGE_ENABLED_						// SAFETY FLAG: enable programming SA voltage offsets, comment out to disable
+#define		VERBOSE_MODE							// OPTION FLAG: more verbose console outputs during driver execute, comment out to disable
+#define		LOCK_OVERCLOCKING						// OPTION FLAG: set MSR 0x194[0x20] to prevent any later changes to this MSR, comment out to disable
+#define		ENABLE_DOMAIN0_OVERCLOCKING					// FUNCTION FLAG: enable Core ratios to maximum (IC) Turbo (all-core Turbo) for maximum performance, comment out to disable
+#define		ENABLE_DOMAIN2_OVERCLOCKING					// FUNCTION FLAG: enable set static Uncore ratio to maximum performance, comment out to disble
+//#define		ENABLE_DOMAIN0_FIVR_PROGRAMMING					// SAFETY FLAG: enable programming IA voltages offsets, comment out to disable
+//#define		ENABLE_DOMAIN2_FIVR_PROGRAMMING					// SAFETY FLAG: enable programming CLR voltage offsets, comment out to disable
+//#define		ENABLE_DOMAIN3_FIVR_PROGRAMMING					// SAFETY FLAG: enable programming SA/Uncore voltage offsets, comment out to disable
 
-#define		_TARGET_CPU_CPUID_SIGN_				0x000306F2		// BUILD OPTION: set 0xFFFFFFFF to override and allow to attempt to run for all CPUs (with potentially unknown results)
-																			// note: CPUID for Haswell-E/EP final QS/production silicon is 0x306F2 (Extended Family: 3F, Model: 6, Stepping: 2)
+#define		TARGET_CPU_CPUID_SIGN			0x000306F2		// BUILD OPTION: set 0xFFFFFFFF to override and allow to attempt to run for all CPUs (with potentially unknown results)
+																		// note: CPUID for Haswell-E/EP final QS/production silicon is 0x306F2 (Extended Family: 3F, Model: 6, Stepping: 2)
 
 typedef struct _PLATFORM_OBJECT {
-	UINTN				Packages;					// number of physical processor packages
-	UINTN				LogicalProcessors;				// total number of logical processors
-	UINTN				EnabledLogicalProcessors;			// total number of enabled logical processors
-	UINTN				Cores[MAX_PACKAGE_COUNT];			// number cores in package[x]
-	UINTN				Threads[MAX_PACKAGE_COUNT];			// number threads in package[x]
-	UINTN				APICID[MAX_PACKAGE_COUNT];			// logical processor number for first core/thread in package[x]
+	UINTN			Packages;					// number of physical processor packages
+	UINTN			LogicalProcessors;				// total number of logical processors
+	UINTN			EnabledLogicalProcessors;			// total number of enabled logical processors (same as logical processors unless AP disabled)
+	UINTN			Cores[MAX_PACKAGE_COUNT];			// number cores in package
+	UINTN			Threads[MAX_PACKAGE_COUNT];			// number threads in package
+	UINTN			APICID[MAX_PACKAGE_COUNT];			// logical processor number for first core/thread in package (i.e. APIC ID)
 } PLATFORM_OBJECT, *PPLATFORM_OBJECT;
 
-typedef struct _PROCESSOR_PACKAGE_OBJECT {
-	UINT32				ProcessorCPUID;					// processor CPUID
-	CHAR16				BrandNameString[100];				// processor brand name Unicode string
-	UINTN				MinFreqModeMulti;				// Minimum Frequency Mode (MFM) or "Low Power Mode" (LPM) multiplier
-	UINTN				LowFreqModeMulti;				// Low Frequency Mode (LFM), minimum non-turbo Core multiplier
-	UINTN				HighFreqModeMulti;				// High Frequecy Mode (HFM), maximum non-turbo Core multiplier
-	UINTN				MaxTurboMulti;					// maximum (1C) Turbo Core multiplier
-	UINTN				MaxUncoreMulti;					// maximum Uncore multiplier
-} PROCESSOR_PACKAGE_OBJECT, *PPROCESSOR_PACKAGE_OBJECT;
+typedef struct _PACKAGE_OBJECT {
+	UINT32			CPUID;						// CPUID
+	CHAR16			Specification[100];				// processor brand name
+	UINTN			MFMMulti;					// Minimum Frequency Mode (MFM) / Low Power Mode (LPM) multiplier
+	UINTN			LFMMulti;					// Low Frequency Mode (LFM) multiplier, min non-turbo Core multiplier
+	UINTN			HFMMulti;					// High Frequecy Mode (HFM) multiplier, max non-turbo Core multiplier
+	UINTN			Turbo1CMulti;					// max (1C) Turbo multiplier
+	UINTN			MaxUncoreMulti;					// max Uncore multiplier
+} PACKAGE_OBJECT, *PPACKAGE_OBJECT;
 
-typedef struct _V3DRIVER_DEVICE_EXTENTION {
-	PPLATFORM_OBJECT		Platform;					// Platform object
-	PPROCESSOR_PACKAGE_OBJECT	ProcessorPackage;				// array of Processor Package objects
-	UINTN				BootstrapProcessor;				// bootstrap processor assignment at driver entry
-	UINTN				NextPackage;					// package number of next package to be programmed/unlocked
-} V3DRIVER_DEVICE_EXTENTION, *PV3DRIVER_DEVICE_EXTENTION;
+typedef struct _SYSTEM_OBJECT {
+	PPLATFORM_OBJECT	Platform;					// Platform object
+	PPACKAGE_OBJECT		Package;					// array of Package objects dynamically built during execution
+	UINTN			BootstrapProcessor;				// bootstrap processor assignment at driver entry
+	UINTN			NextPackage;					// package number of next Package to be programmed
+} SYSTEM_OBJECT, *PSYSTEM_OBJECT;
 
 // global variables
-EFI_MP_SERVICES_PROTOCOL		*MpServicesProtocol;				// ptr to MP Services Protocol
-V3DRIVER_DEVICE_EXTENTION		*DeviceExtension;				// ptr to device extension
+EFI_MP_SERVICES_PROTOCOL	*MpServicesProtocol;				// ptr to MP Services Protocol handle
+SYSTEM_OBJECT			*System;					// ptr to base System object
 
 // function prototypes
-EFI_STATUS	EFIAPI InitializePlatform(IN OUT PPLATFORM_OBJECT *PlatformObject);
-EFI_STATUS	EFIAPI EnumProcessors(IN OUT PPROCESSOR_PACKAGE_OBJECT *ProcessorPackageObject);
+EFI_STATUS	EFIAPI InitPlatform(IN OUT PPLATFORM_OBJECT *PlatformObject);
+EFI_STATUS	EFIAPI EnumProcessors(IN OUT PPACKAGE_OBJECT *PackageObject);
 VOID		EFIAPI ProgramPackage(IN OUT VOID *Buffer);
 BOOLEAN		EFIAPI IsMicrocodePresent(VOID);
 
@@ -123,12 +124,15 @@ EFIDriverEntry(
 	IN EFI_SYSTEM_TABLE *SystemTable
 )
 {
-	EFI_STATUS status;
-
 	// driver init
-	Print(
+	EFI_STATUS status = SystemTable->ConOut->OutputString(
+		SystemTable->ConOut,
 		L"Intel(R) Xeon(R) Processor v3 (Haswell-E/EP) Full Turbo Boost DXE driver\r\n\0"
 		);
+
+	if (EFI_ERROR(status)) {
+		goto DriverExit;
+	}
 
 	// get handle to MP Services Protocol
 	EFI_GUID efi_mp_service_protocol_guid = EFI_MP_SERVICES_PROTOCOL_GUID;
@@ -141,7 +145,7 @@ EFIDriverEntry(
 
 	if (EFI_ERROR(status)) {
 		Print(
-			L"Error: Unable to locate EFI MP Services Protocol (%r)\r\n\0",
+			L"Failure: Unable to locate EFI MP Services Protocol (%r)\r\n\0",
 			status
 			);
 		
@@ -151,72 +155,77 @@ EFIDriverEntry(
 	// verify no microcode patch is loaded, exit if detected
 	if (IsMicrocodePresent() == TRUE) {
 		Print(
-			L"Error: Processor microcode update revision detected\r\n\0"
+			L"Failure: Processor microcode update revision detected\r\n\0"
 			);
 
 		goto DriverExit;
 	}
 
-	// allocate pool memory for device extension
-	DeviceExtension = (PV3DRIVER_DEVICE_EXTENTION)AllocatePool(
-		sizeof(V3DRIVER_DEVICE_EXTENTION)
+	// create System object
+	System = (PSYSTEM_OBJECT)AllocatePool(
+		sizeof(SYSTEM_OBJECT)
 		);
 
-	if (!DeviceExtension) {
+	if (!System) {
 		goto DriverExit;
 	}
-
-	// zero it
-	SetMem(
-		DeviceExtension,
-		sizeof(V3DRIVER_DEVICE_EXTENTION),
-		0
-		);
-	
+	else {
+		// zero it
+		SetMem(
+			System,
+			sizeof(SYSTEM_OBJECT),
+			0
+			);
+	}
+		
 	// get initial BSP
 	status = MpServicesProtocol->WhoAmI(
 		MpServicesProtocol,
-		&DeviceExtension->BootstrapProcessor
+		&System->BootstrapProcessor
 		);
 
 	if (EFI_ERROR(status)) {
 		Print(
-			L"Error: Failed to get current bootstrap processor (%r)\r\n\0",
+			L"Failure: Cannot get current bootstrap processor (%r)\r\n\0",
 			status
 			);
 
 		goto DriverExit;
 	}
 
-	// initialize System
+	// initialize Platform
 	if (EFI_ERROR(
-		InitializePlatform(
-			&DeviceExtension->Platform
-		))) {
+		InitPlatform(
+			&System->Platform
+			)
+		)) {
 		goto DriverExit;
 	}
 
-	// enumerate Processor Packages
+	// enumerate Packages
 	if (EFI_ERROR(
 		EnumProcessors(
-			&DeviceExtension->ProcessorPackage
-		))) {
+			&System->Package
+			)
+		)) {
 		goto DriverExit;
 	}
 
-	for (UINTN package_index = 0; package_index < DeviceExtension->Platform->Packages; package_index++) {
-		// program CPU using current AP if BSP already CPU0 (likely)
-		if (DeviceExtension->BootstrapProcessor == DeviceExtension->Platform->APICID[DeviceExtension->NextPackage]) {
-			ProgramPackage(NULL);			
+	for (System->NextPackage ; System->NextPackage < System->Platform->Packages; System->NextPackage++) {
+		// program CPU using current AP if same as current BSP
+		if (System->BootstrapProcessor == System->Platform->APICID[System->NextPackage]) {
+			ProgramPackage(
+				NULL
+				);			
 		}
 		else {
-			// dispatch AP to program CPUx
+			// dispatch AP to program CPU
 			status = MpServicesProtocol->StartupThisAP(
 				MpServicesProtocol,
 				ProgramPackage,
-				DeviceExtension->Platform->APICID[DeviceExtension->NextPackage],
+				System->Platform->APICID[System->NextPackage],
 				NULL,
-				100000,  // 100 ms timeout
+				AP_EXEC_TIMEOUT,
 				NULL,
 				NULL
 				);
@@ -224,14 +233,11 @@ EFIDriverEntry(
 			if (EFI_ERROR(status)) {
 				Print(
 					L"Warning: Failed to startup programming AP on CPU%d (%r)\r\n\0",
-					DeviceExtension->NextPackage,
+					System->NextPackage,
 					status
 					);
 			}
 		}
-		
-		// next package in sequence
-		DeviceExtension->NextPackage++;
 	}
 	
 DriverExit:
@@ -240,20 +246,14 @@ DriverExit:
 	return EFI_SUCCESS;
 }
 
+// creates Platform object and intializes all member variables
 EFI_STATUS
 EFIAPI
-InitializePlatform(
+InitPlatform(
 	IN OUT PPLATFORM_OBJECT *PlatformObject
 )
 {
-	// local variables
-	EFI_PROCESSOR_INFORMATION processor_info;
-	UINTN package_index;
-	UINTN thread_index;
-	UINTN hyperthreading_detected;
-	EFI_STATUS status;
-	
-	// allocate memory pool space
+	// allocate memory
 	PPLATFORM_OBJECT Platform = (PPLATFORM_OBJECT)AllocatePool(
 		sizeof(PLATFORM_OBJECT)
 		);
@@ -271,12 +271,9 @@ InitializePlatform(
 
 	// set initial values
 	Platform->Packages = 1;
-	package_index = 0;
-	thread_count = 0;
-	hyperthreading_detected = 0
-		
+	
 	// get number of logical processors, enabled logical processors for entire system
-	status = MpServicesProtocol->GetNumberOfProcessors(
+	EFI_STATUS status = MpServicesProtocol->GetNumberOfProcessors(
 		MpServicesProtocol,
 		&Platform->LogicalProcessors,
 		&Platform->EnabledLogicalProcessors
@@ -285,8 +282,12 @@ InitializePlatform(
 	if (EFI_ERROR(status)) {
 		return status;
 	}
-			
-	for (thread_index = 0; thread_index < Platform->LogicalProcessors; thread_index++) {
+
+	EFI_PROCESSOR_INFORMATION processor_info;
+	UINTN thread_counter = 0;
+	UINTN smt_enabled = 0;
+
+	for (UINTN thread_index = 0; thread_index < Platform->LogicalProcessors; thread_index++) {
 		MpServicesProtocol->GetProcessorInfo(
 			MpServicesProtocol,
 			thread_index,
@@ -295,134 +296,117 @@ InitializePlatform(
 
 		// detect if HyperThreading enabled
 		if (processor_info.Location.Thread == 1) {
-			hyperthreading_detected = 1;
+			smt_enabled = 1;
 		}
 		
-		thread_count++;
+		thread_counter++;
 
 		// last logical processor
 		if (thread_index == (Platform->LogicalProcessors - 1)) {
-			Platform->Threads[package_index] = thread_count;
+			Platform->Threads[System->NextPackage] = thread_counter;
 
-			Platform->Cores[package_index] = Platform->Threads[package_index] / (hyperthreading_detected + 1);
+			Platform->Cores[System->NextPackage] = Platform->Threads[System->NextPackage] / (smt_enabled + 1);
 
-			Platform->APICID[package_index] = thread_index - thread_count + 1;
+			Platform->APICID[System->NextPackage] = (thread_index - thread_counter) + 1;
 
 			break;
 		}
 	
 		// package ID changes -> new package found
-		if (processor_info.Location.Package != package_index) {			
+		if (processor_info.Location.Package != System->NextPackage) {
 			Platform->Packages++;
 			
-			Platform->Threads[package_index] = thread_count - 1;
+			Platform->Threads[System->NextPackage] = thread_counter - 1;
 
-			Platform->Cores[package_index] = Platform->Threads[package_index] / (hyperthreading_detected + 1);
+			Platform->Cores[System->NextPackage] = Platform->Threads[System->NextPackage] / (smt_enabled + 1);
 			
-			Platform->APICID[package_index] = thread_index - thread_count + 1;
+			Platform->APICID[System->NextPackage] = (thread_index - thread_counter) + 1;
 			
-			package_index++;
+			System->NextPackage++;
 
-			thread_count = 1;
+			thread_counter = 1;
 		}
 	}
+
+	System->NextPackage = 0;
 	
-	#ifdef _VERBOSE_OUTPUT_
+	#ifdef VERBOSE_MODE
 
 	Print(
 		L"\r\n\0"
 		);
 
-	#endif // _VERBOSE_OUTPUT_
+	#endif // VERBOSE_MODE
 	
 	// display results to console
-	Print(L"Processor Packages: %d, Logical Processors: %d (%dC/%dT)\r\n\0",
+	Print(L"Processor Packages: %d, Logical Processors: %2d (%dC/%dT)\r\n\0",
 		Platform->Packages,
 		Platform->LogicalProcessors,
-		Platform->LogicalProcessors / (hyperthreading_detected + 1),
+		Platform->LogicalProcessors / (smt_enabled + 1),
 		Platform->LogicalProcessors
 		);
 
-	#ifdef _VERBOSE_OUTPUT_
-	
-	UINTN package_count;
+	#ifdef VERBOSE_MODE
 
-	for (package_count = 0; package_count < Platform->Packages; package_count++)
-	{
-		Print(L" -- Processor %d (CPU%d) Cores: %d, Threads: %d, APIC ID: %02xh\r\n\0",
-			package_count,
-			package_count,
-			Platform->Cores[package_count],
-			Platform->Threads[package_count],
-			Platform->APICID[package_count]
+	for (System->NextPackage; System->NextPackage < Platform->Packages; System->NextPackage++) {
+		Print(L" -- Processor %d (CPU%d) Cores: %2d, Threads: %2d, APIC ID: %02xh\r\n\0",
+			System->NextPackage,
+			System->NextPackage,
+			Platform->Cores[System->NextPackage],
+			Platform->Threads[System->NextPackage],
+			Platform->APICID[System->NextPackage]
 			);
 	}
 
-	#endif // _VERBOSE_OUTPUT_
+	System->NextPackage = 0;
+
+	#endif // VERBOSE_MODE
 
 	*PlatformObject = Platform;
 	
 	return EFI_SUCCESS;
 }
 
+// creates array of Package objects and intializes all member variables
 EFI_STATUS
 EFIAPI
 EnumProcessors(
-	IN OUT PPROCESSOR_PACKAGE_OBJECT *ProcessorPackageObject
+	IN OUT PPACKAGE_OBJECT *PackageObject
 )
 {
-	// local variables
-	UINTN package_index;
-	UINT64 msr_ret;
-	
-	// allocate memory pool space (one for each package detected)
-	PPROCESSOR_PACKAGE_OBJECT ProcessorPackage = (PPROCESSOR_PACKAGE_OBJECT)AllocatePool(
-		DeviceExtension->Platform->Packages * sizeof(PROCESSOR_PACKAGE_OBJECT)
+	// allocate memory
+	PPACKAGE_OBJECT Package = (PPACKAGE_OBJECT)AllocatePool(
+		System->Platform->Packages * sizeof(PACKAGE_OBJECT)
 		);
 	
-	if (!ProcessorPackage) {
+	if (!Package) {
 		return EFI_OUT_OF_RESOURCES;
 	}
 
 	// zero it
 	SetMem(
-		ProcessorPackage, 
-		sizeof(PROCESSOR_PACKAGE_OBJECT),
+		Package, 
+		sizeof(PACKAGE_OBJECT),
 		0
 		);
 	
 	// initialize processor data
-	for (package_index = 0; package_index < DeviceExtension->Platform->Packages; package_index++)
-	{			
+	for (System->NextPackage; System->NextPackage < System->Platform->Packages; System->NextPackage++) {			
 		// get processor CPUID
 		AsmCpuid(
 			CPUID_VERSION_INFO,
-			&ProcessorPackage[package_index].ProcessorCPUID,
+			&Package[System->NextPackage].CPUID,
 			NULL,
 			NULL,
 			NULL
 			);
 
-		// throw error if does not match target CPUID (unless override set)
-		if ((ProcessorPackage[package_index].ProcessorCPUID != _TARGET_CPU_CPUID_SIGN_) \
-			&& (_TARGET_CPU_CPUID_SIGN_ != 0xFFFFFFFF)) {
-			Print(
-				L"Error: CPU%d Processor CPUID (0x%x) not equal to 0x%x\r\n\0",
-				package_index,
-				ProcessorPackage[package_index].ProcessorCPUID,
-				_TARGET_CPU_CPUID_SIGN_
-				);
-
-			return EFI_ABORTED;
-		}
-
-		// build Processor Brand Name string (8-bit ASCII)		
+		// build Processor Brand Name string		
 		CHAR8 processor_brand_string_buffer[CPUID_BRAND_STRING_LEN + 1];
 		UINT32 cpuid_string[4];
 		UINTN k = 0;
 
-		for (UINTN i = 0; i < 3; i++) {
-	
+		for (UINTN i = 0; i < 3; i++) {	
 			AsmCpuid(
 				(UINT32)(CPUID_BRAND_STRING_BASE + i),
 				&cpuid_string[0],
@@ -435,10 +419,10 @@ EnumProcessors(
 				CopyMem(
 					processor_brand_string_buffer + k,
 					&cpuid_string[j],
-					sizeof(UINT32)
+					4
 					);
 
-				k = k + sizeof(UINT32);
+				k += 4;
 			}
 		}
 		
@@ -447,20 +431,20 @@ EnumProcessors(
 		// convert ASCII to Unicode
 		AsciiStrToUnicodeStrS(
 			processor_brand_string_buffer,
-			ProcessorPackage[package_index].BrandNameString,
-			sizeof(ProcessorPackage[package_index].BrandNameString)
+			Package[System->NextPackage].Specification,
+			sizeof(Package[System->NextPackage].Specification)
 			);
 
 		// get Min/Low/High (LPM/LFM/HFM) non-turbo Core ratios
-		msr_ret = AsmReadMsr64(
+		UINT64 msr_ret = AsmReadMsr64(
 			MSR_PLATFORM_INFO
 			);
 
-		ProcessorPackage[package_index].MinFreqModeMulti = (msr_ret & 0x00FF000000000000ull) >> 48;
+		Package[System->NextPackage].MFMMulti = (msr_ret & 0x00FF000000000000ull) >> 48;
 		
-		ProcessorPackage[package_index].LowFreqModeMulti = (msr_ret & 0x0000FF0000000000ull) >> 40;
+		Package[System->NextPackage].LFMMulti = (msr_ret & 0x0000FF0000000000ull) >> 40;
 		
-		ProcessorPackage[package_index].HighFreqModeMulti = (msr_ret & 0x000000000000FF00ull) >> 8;
+		Package[System->NextPackage].HFMMulti = (msr_ret & 0x000000000000FF00ull) >> 8;
 
 		// get maximum Core Turbo ratio via OC Mailbox
 		AsmWriteMsr64(
@@ -474,14 +458,14 @@ EnumProcessors(
 
 		if ((msr_ret & OC_MAILBOX_RESPONSE_MASK) != OC_MAILBOX_RESPONSE_SUCCESS) {
 			Print(
-				L"Error: CPU%d OC Mailbox failure getting maximum Core turbo multiplier\r\n\0",
-				package_index
+				L"Failure: CPU%d OC Mailbox error reading max Turbo multiplier\r\n\0",
+				System->NextPackage
 				);
 			
 			return EFI_ABORTED;
 		}
 
-		ProcessorPackage[package_index].MaxTurboMulti = msr_ret & 0x00000000000000FFull;
+		Package[System->NextPackage].Turbo1CMulti = msr_ret & 0x00000000000000FFull;
 
 		// get maximum Uncore ratio via OC Mailbox
 		AsmWriteMsr64(
@@ -495,122 +479,128 @@ EnumProcessors(
 
 		if ((msr_ret & OC_MAILBOX_RESPONSE_MASK) != OC_MAILBOX_RESPONSE_SUCCESS) {
 			Print(
-				L"Error: CPU%d OC Mailbox failure getting maximum Uncore multiplier\r\n\0",
-				package_index
+				L"Failure: CPU%d OC Mailbox error reading max SA/Uncore multiplier\r\n\0",
+				System->NextPackage
 				);
 			
 			return EFI_ABORTED;
 		}
 
-		ProcessorPackage[package_index].MaxUncoreMulti = msr_ret & 0x00000000000000FFull;
+		Package[System->NextPackage].MaxUncoreMulti = msr_ret & 0x00000000000000FFull;
 		
-		#ifdef _VERBOSE_OUTPUT_
+		#ifdef VERBOSE_MODE
 
 		Print(
 			L"\r\n\0"
 		);
 
-		#endif // _VERBOSE_OUTPUT_
+		#endif // VERBOSE_MODE
 		
 		// display results to console
 		Print(
 			L"Detected CPU%d: %s\r\n\0",
-			package_index,
-			ProcessorPackage[package_index].BrandNameString
+			System->NextPackage,
+			Package[System->NextPackage].Specification
 			);
 
-		#ifdef _VERBOSE_OUTPUT_
+		#ifdef VERBOSE_MODE
 
 		Print(
-			L" -- CPU%d Min Frequency Mode (MFM): %d MHz (= %d x %d MHz)\r\n\0",
-			package_index,
-			ProcessorPackage[package_index].MinFreqModeMulti * BUS_FREQUENCY,
-			ProcessorPackage[package_index].MinFreqModeMulti,
-			BUS_FREQUENCY
-			);
-
-		Print(
-			L" -- CPU%d Low Frequency Mode (LFM): %d MHz (= %d x %d MHz)\r\n\0", 
-			package_index,
-			ProcessorPackage[package_index].LowFreqModeMulti * BUS_FREQUENCY,
-			ProcessorPackage[package_index].LowFreqModeMulti,
+			L" --  Min Frequency Mode (MFM): %4d MHz (= %2d x %d MHz)\r\n\0",
+			Package[System->NextPackage].MFMMulti * BUS_FREQUENCY,
+			Package[System->NextPackage].MFMMulti,
 			BUS_FREQUENCY
 			);
 
 		Print(
-			L" -- CPU%d High Frequency Mode (HFM): %d MHz (= %d x %d MHz)\r\n\0",
-			package_index,
-			ProcessorPackage[package_index].HighFreqModeMulti * BUS_FREQUENCY,
-			ProcessorPackage[package_index].HighFreqModeMulti,
-			BUS_FREQUENCY
-			);
-
-		Print(L" -- CPU%d Max Core Turbo Frequency: %d MHz (= %d x %d MHz)\r\n\0",
-			package_index,
-			ProcessorPackage[package_index].MaxTurboMulti * BUS_FREQUENCY,
-			ProcessorPackage[package_index].MaxTurboMulti,
+			L" --  Low Frequency Mode (LFM): %4d MHz (= %2d x %d MHz)\r\n\0", 
+			Package[System->NextPackage].LFMMulti * BUS_FREQUENCY,
+			Package[System->NextPackage].LFMMulti,
 			BUS_FREQUENCY
 			);
 
 		Print(
-			L" -- CPU%d Max Uncore Frequency: %d MHz (= %d x %d MHz)\r\n\0",
-			package_index,
-			ProcessorPackage[package_index].MaxUncoreMulti * BUS_FREQUENCY,
-			ProcessorPackage[package_index].MaxUncoreMulti,
+			L" -- High Frequency Mode (HFM): %4d MHz (= %2d x %d MHz)\r\n\0",
+			Package[System->NextPackage].HFMMulti * BUS_FREQUENCY,
+			Package[System->NextPackage].HFMMulti,
 			BUS_FREQUENCY
 			);
+
+		Print(L" --  Max (1C) Turbo Frequency: %4d MHz (= %2d x %d MHz)\r\n\0",
+			Package[System->NextPackage].Turbo1CMulti * BUS_FREQUENCY,
+			Package[System->NextPackage].Turbo1CMulti,
+			BUS_FREQUENCY
+			);
+
+		#ifdef ENABLE_DOMAIN2_OVERCLOCKING
 		
-		#endif // _VERBOSE_OUTPUT_		
+		Print(
+			L" --   Max SA/Uncore Frequency: %4d MHz (= %2d x %d MHz)\r\n\0",
+			Package[System->NextPackage].MaxUncoreMulti * BUS_FREQUENCY,
+			Package[System->NextPackage].MaxUncoreMulti,
+			BUS_FREQUENCY
+			);
+
+		#endif // ENABLE_DOMAIN2_OVERCLOCKING
+		
+		#endif // VERBOSE_MODE		
 	}
+
+	System->NextPackage = 0;
 	
-	#ifdef _VERBOSE_OUTPUT_
+	#ifdef VERBOSE_MODE
 
 	Print(
 		L"\r\n\0"
 	);
 
-	#endif // _VERBOSE_OUTPUT_
+	#endif // VERBOSE_MODE
 
-	*ProcessorPackageObject = ProcessorPackage;
+	*PackageObject = Package;
 	
 	return EFI_SUCCESS;
 }
 
-// must be run the context of the package to be programmed
+// programs package; MUST be executed in context of package to be programmed
 VOID
 EFIAPI
 ProgramPackage(
 	IN OUT VOID *Buffer
 )
 {	
-	// local variables
-	UINT64 msr_ret;
+	// throw error if package CPUID not match build target CPUID
+	if ((System->Package[System->NextPackage].CPUID != TARGET_CPU_CPUID_SIGN) \
+		&& (TARGET_CPU_CPUID_SIGN != 0xFFFFFFFF)) {  // override
+		Print(
+			L"Failure: CPU%d CPUID (0x%x) not equal to 0x%x\r\n\0",
+			System->NextPackage,
+			System->Package[System->NextPackage].CPUID,
+			TARGET_CPU_CPUID_SIGN
+			);
 
-	// target package to be programmed
-	UINTN processor_index = DeviceExtension->NextPackage;
-
+		return;
+	}
+	
 	// verify MSR_FLEX_RATIO OC Lock Bit not set
-	msr_ret = AsmReadMsr64(
+	UINT64 msr_ret = AsmReadMsr64(
 		MSR_FLEX_RATIO
 		);
 
 	if ((msr_ret & MSR_FLEX_RATIO_OC_LOCK_BIT) != 0) {
 		Print(
-			L"Error: CPU%d MSR_FLEX_RATIO (0x194) OC Lock Bit (0x20) is set\r\n\0",
-			processor_index
+			L"Failure: CPU%d MSR_FLEX_RATIO (0x194) OC Lock Bit (20h) is set\r\n\0",
+			System->NextPackage
 			);
 
 		return;
 	}
 
-	#ifdef _DOMAIN0_VOLTAGE_ENABLED_
+	#ifdef ENABLE_DOMAIN0_FIVR_PROGRAMMING
 
-	// program Core voltage offset
-	UINT64 msr_domain0_VID_program_buffer;
-	
-	msr_domain0_VID_program_buffer = (OC_MAILBOX_SET_VID_PARAMS | OC_MAILBOX_DOMAIN_0 | OC_MAILBOX_COMMAND_EXEC) \
-		| kcpu_domain_0_voltage_offset[processor_index] \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti;
+	// program IA dynamic voltage offset
+	UINT64 msr_domain0_VID_program_buffer = (OC_MAILBOX_SET_VID_PARAMS | OC_MAILBOX_DOMAIN_0 | OC_MAILBOX_COMMAND_EXEC) \
+		| kcpu_domain_0_voltage_offset[System->NextPackage] \
+		| System->Package[System->NextPackage].Turbo1CMulti;
 
 	AsmWriteMsr64(
 		MSR_OC_MAILBOX,
@@ -623,21 +613,19 @@ ProgramPackage(
 
 	if ((msr_ret & OC_MAILBOX_RESPONSE_MASK) != OC_MAILBOX_RESPONSE_SUCCESS) {
 		Print(
-			L"Warning: CPU%d OC Mailbox failure setting Core dynamic offset voltage\r\n\0",
-			processor_index
+			L"Warning: CPU%d OC Mailbox error setting IA dynamic offset voltage\r\n\0",
+			System->NextPackage
 			);
 	}
 
-	#endif // _DOMAIN0_VOLTAGE_ENABLED_
+	#endif // ENABLE_DOMAIN0_FIVR_PROGRAMMING
 
-	#ifdef _DOMAIN2_VOLTAGE_ENABLED_
+	#ifdef ENABLE_DOMAIN2_FIVR_PROGRAMMING
 
-	// program CLR voltage offset
-	UINT64 msr_domain2_VID_program_buffer;
-	
-	msr_domain2_VID_program_buffer = (OC_MAILBOX_SET_VID_PARAMS | OC_MAILBOX_DOMAIN_2 | OC_MAILBOX_COMMAND_EXEC) \
-		| kcpu_domain_2_voltage_offset[processor_index] \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxUncoreMulti;
+	// program CLR dynamic voltage offset
+	UINT64 msr_domain2_VID_program_buffer = (OC_MAILBOX_SET_VID_PARAMS | OC_MAILBOX_DOMAIN_2 | OC_MAILBOX_COMMAND_EXEC) \
+		| kcpu_domain_2_voltage_offset[System->NextPackage] \
+		| System->Package[System->NextPackage].MaxUncoreMulti;
 
 	AsmWriteMsr64(
 		MSR_OC_MAILBOX,
@@ -650,20 +638,18 @@ ProgramPackage(
 
 	if ((msr_ret & OC_MAILBOX_RESPONSE_MASK) != OC_MAILBOX_RESPONSE_SUCCESS) {
 		Print(
-			L"Warning: CPU%d OC Mailbox failure setting CLR (CBo/LLC/Ring) dynamic offset voltage\r\n\0",
-			processor_index
+			L"Warning: CPU%d OC Mailbox error setting CLR dynamic offset voltage\r\n\0",
+			System->NextPackage
 			);
 	}
 
-	#endif // _DOMAIN2_VOLTAGE_ENABLED_
+	#endif // ENABLE_DOMAIN2_FIVR_PROGRAMMING
 
-	#ifdef _DOMAIN3_VOLTAGE_ENABLED_
+	#ifdef ENABLE_DOMAIN3_FIVR_PROGRAMMING
 		
-	// program SA voltage offset
-	UINT64 msr_domain3_VID_program_buffer;
-	
-	msr_domain3_VID_program_buffer = (OC_MAILBOX_SET_VID_PARAMS | OC_MAILBOX_DOMAIN_3 | OC_MAILBOX_COMMAND_EXEC) \
-		| kcpu_domain_3_voltage_offset[processor_index];
+	// program SA/Uncore dynamic voltage offset
+	UINT64 msr_domain3_VID_program_buffer = (OC_MAILBOX_SET_VID_PARAMS | OC_MAILBOX_DOMAIN_3 | OC_MAILBOX_COMMAND_EXEC) \
+		| kcpu_domain_3_voltage_offset[System->NextPackage];
 
 	AsmWriteMsr64(
 		MSR_OC_MAILBOX,
@@ -676,26 +662,24 @@ ProgramPackage(
 
 	if ((msr_ret & OC_MAILBOX_RESPONSE_MASK) != OC_MAILBOX_RESPONSE_SUCCESS) {
 		Print(
-			L"Warning: CPU%d OC Mailbox failure setting System Agent dynamic offset voltage\r\n\0",
-			processor_index
+			L"Warning: CPU%d OC Mailbox error setting SA/Uncore dynamic offset voltage\r\n\0",
+			System->NextPackage
 			);
 	}
 
-	#endif // _DOMAIN3_VOLTAGE_ENABLED_
+	#endif // ENABLE_DOMAIN3_FIVR_PROGRAMMING
 	
-	#ifdef _DOMAIN0_CLOCKING_ENABLED_
+	#ifdef ENABLE_DOMAIN0_OVERCLOCKING
 
-	// set Core Turbo ratios
-	UINT64 msr_domain0_clock_program_buffer;
-	
-	msr_domain0_clock_program_buffer = DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti << 8  \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti << 16 \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti << 24 \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti << 32 \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti << 40 \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti << 48 \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti << 56;
+	// set Turbo ratios
+	UINT64 msr_domain0_clock_program_buffer = System->Package[System->NextPackage].Turbo1CMulti \
+		| System->Package[System->NextPackage].Turbo1CMulti << 8  \
+		| System->Package[System->NextPackage].Turbo1CMulti << 16 \
+		| System->Package[System->NextPackage].Turbo1CMulti << 24 \
+		| System->Package[System->NextPackage].Turbo1CMulti << 32 \
+		| System->Package[System->NextPackage].Turbo1CMulti << 40 \
+		| System->Package[System->NextPackage].Turbo1CMulti << 48 \
+		| System->Package[System->NextPackage].Turbo1CMulti << 56;
 
 	AsmWriteMsr64(
 		MSR_TURBO_RATIO_LIMIT,
@@ -717,28 +701,26 @@ ProgramPackage(
 
 	// display results to console
 	Print(
-		L"CPU%d Success! %2d-core Turbo Frequency: %d MHz (= %d x %d MHz)\r\n\0",
-		processor_index,
-		DeviceExtension->Platform->Cores[processor_index],
-		DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti * BUS_FREQUENCY,
-		DeviceExtension->ProcessorPackage[processor_index].MaxTurboMulti,
+		L"Success! Set CPU%d %2dC Turbo Frequency: %4d MHz (= %2d x %d MHz)\r\n\0",
+		System->NextPackage,
+		System->Platform->Cores[System->NextPackage],
+		System->Package[System->NextPackage].Turbo1CMulti * BUS_FREQUENCY,
+		System->Package[System->NextPackage].Turbo1CMulti,
 		BUS_FREQUENCY
 		);
 
-	#endif // _DOMAIN0_CLOCKING_ENABLED_
+	#endif // ENABLE_DOMAIN0_OVERCLOCKING
 
-	#ifdef _DOMAIN2_CLOCKING_ENABLED_
+	#ifdef ENABLE_DOMAIN2_OVERCLOCKING
 
 	// set Uncore ratios	
-	UINT64 msr_domain2_clock_program_buffer;
-	
 	msr_ret = AsmReadMsr64(
 		UNCORE_RATIO_LIMIT
 		);
 
-	msr_domain2_clock_program_buffer = (msr_ret & 0xFFFFFFFFFFFF0000ull) \
-		| DeviceExtension->ProcessorPackage[processor_index].MaxUncoreMulti \
-		| (DeviceExtension->ProcessorPackage[processor_index].MaxUncoreMulti << 8);
+	UINT64 msr_domain2_clock_program_buffer = (msr_ret & 0xFFFFFFFFFFFF0000ull) \
+		| System->Package[System->NextPackage].MaxUncoreMulti \
+		| (System->Package[System->NextPackage].MaxUncoreMulti << 8);
 
 	AsmWriteMsr64(
 		UNCORE_RATIO_LIMIT,
@@ -746,16 +728,16 @@ ProgramPackage(
 		);
 
 	Print(
-		L"CPU%d Success! Static Uncore Frequency: %d MHz (= %d x %d MHz)\r\n\0",
-		processor_index,
-		DeviceExtension->ProcessorPackage[processor_index].MaxUncoreMulti * BUS_FREQUENCY,
-		DeviceExtension->ProcessorPackage[processor_index].MaxUncoreMulti,
+		L"Success! Set CPU%d Max Uncore Frequency: %4d MHz (= %2d x %d MHz)\r\n\0",
+		System->NextPackage,
+		System->Package[System->NextPackage].MaxUncoreMulti * BUS_FREQUENCY,
+		System->Package[System->NextPackage].MaxUncoreMulti,
 		BUS_FREQUENCY
 		);
 
-	#endif // _DOMAIN2_CLOCKING_ENABLED_
+	#endif // ENABLE_DOMAIN2_OVERCLOCKING
 
-	#ifdef _SET_OVERCLOCKING_LOCK_
+	#ifdef LOCK_OVERCLOCKING
 	
 	// set MSR_FLEX_RATIO OC Lock Bit
 	UINT64 msr_program_buffer;
@@ -772,7 +754,7 @@ ProgramPackage(
 		msr_program_buffer
 		);
 
-	#endif // _SET_OVERCLOCKING_LOCK_
+	#endif // LOCK_OVERCLOCKING
 	
 	return;
 }
@@ -783,9 +765,6 @@ IsMicrocodePresent(
 	VOID
 )
 {
-	// local variables
-	UINT64 msr_ret;
-
 	// get microcode revision level
 	AsmWriteMsr64(
 		MSR_IA32_BIOS_SIGN_ID,
@@ -800,7 +779,7 @@ IsMicrocodePresent(
 		NULL
 	);
 
-	msr_ret = AsmReadMsr64(
+	UINT64 msr_ret = AsmReadMsr64(
 		MSR_IA32_BIOS_SIGN_ID
 	);
 
