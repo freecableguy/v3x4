@@ -73,7 +73,7 @@
 #define		MAX_PACKAGE_COUNT				2			// SETTING: maximum number of supported packages/sockets, options: 1, 2, 4, 8
 #define		LIMIT_TURBO_MULTI				0			// SETTING: max turbo multiplier (not to exceed fused limit), 0 for auto max
 #define		LIMIT_UNCORE_MUTLI				0			// SETTING: max Uncore multiplier (not to exceed fused limit), 0 for auto max
-#define		SET_STATIC_UNCORE_FREQ				FALSE			// SETTING: sets static Uncore frequency (at LIMIT_UNCORE_MULTI)
+#define		SET_STATIC_UNCORE_FREQ				TRUE			// SETTING: sets static Uncore frequency (at LIMIT_UNCORE_MULTI)
 #define		DISABLE_FIVR_FAULT_CONTROL			TRUE			// SETTING: disable FIVR fault detection
 #define		DISABLE_FIVR_EFFICIENCY_MODE			TRUE			// SETTING: disable FIVR efficiency mode
 #define		SET_OVERCLOCK_LOCK				TRUE			// SETTING: set MSR 0x194[0x20] to prevent any later changes to this MSR, cleared on reset
