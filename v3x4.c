@@ -62,7 +62,7 @@
 #define		MIN_UNCORE_MULTI				12
 
 // builds options
-#define		VERBOSE_OUTPUT														// OPTION FLAG: more verbose driver information during system boot
+#define		VERBOSE_OUTPUT								// OPTION FLAG: more verbose driver information during system boot
 #define		ENABLE_DOMAIN0_OVERCLOCKING						// OPTION FLAG: enable IA ratios to maximum (1C) Turbo (all-core Turbo) for maximum performance
 #define		ENABLE_DOMAIN2_OVERCLOCKING						// OPTION FLAG: enable set static Uncore ratio to maximum performance
 //#define		ENABLE_DOMAIN0_FIVR_PROGRAMMING						// OPTION FLAG: enable programming IA voltages offsets
