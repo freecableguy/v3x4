@@ -618,6 +618,68 @@ ProgramPackage(
 		return;
 	}
 
+	// set turbo frequency limits
+	UINT64 msr_domain0_clock_program_buffer = System->Package[System->NextPackage].TurboMultiLimit \
+		| System->Package[System->NextPackage].TurboMultiLimit << 8  \
+		| System->Package[System->NextPackage].TurboMultiLimit << 16 \
+		| System->Package[System->NextPackage].TurboMultiLimit << 24 \
+		| System->Package[System->NextPackage].TurboMultiLimit << 32 \
+		| System->Package[System->NextPackage].TurboMultiLimit << 40 \
+		| System->Package[System->NextPackage].TurboMultiLimit << 48 \
+		| System->Package[System->NextPackage].TurboMultiLimit << 56;
+
+	AsmWriteMsr64(
+		MSR_TURBO_RATIO_LIMIT,
+		msr_domain0_clock_program_buffer
+		);
+
+	AsmWriteMsr64(
+		MSR_TURBO_RATIO_LIMIT1,
+		msr_domain0_clock_program_buffer
+		);
+
+	msr_domain0_clock_program_buffer |= MSR_TURBO_RATIO_SEMAPHORE_BIT;
+
+	AsmWriteMsr64(
+		MSR_TURBO_RATIO_LIMIT2,
+		msr_domain0_clock_program_buffer
+		);
+
+	Print(
+		L"Success! Set CPU%d %2dC turbo frequency limit: %d MHz (= %d x %d MHz)\r\n\0",
+		System->NextPackage,
+		System->Platform->Cores[System->NextPackage],
+		System->Package[System->NextPackage].TurboMultiLimit * BUS_FREQUENCY,
+		System->Package[System->NextPackage].TurboMultiLimit,
+		BUS_FREQUENCY
+		);
+
+	// set Uncore frequency limits	
+	msr_ret = AsmReadMsr64(
+		MSR_UNCORE_RATIO_LIMIT
+		);
+
+	UINT64 msr_domain2_clock_program_buffer = (msr_ret & 0xFFFFFFFFFFFFFF00ull) \
+		| System->Package[System->NextPackage].UncoreMultiLimit;
+
+	if (SET_STATIC_UNCORE_FREQ == TRUE) {
+		msr_domain2_clock_program_buffer &= 0xFFFFFFFFFFFF00FFull;
+		msr_domain2_clock_program_buffer |= (System->Package[System->NextPackage].UncoreMultiLimit << 8);
+	}
+
+	AsmWriteMsr64(
+		MSR_UNCORE_RATIO_LIMIT,
+		msr_domain2_clock_program_buffer
+		);
+
+	Print(
+		L"Success! Set CPU%d Uncore frequency limit: %d MHz (= %d x %d MHz)\r\n\0",
+		System->NextPackage,
+		System->Package[System->NextPackage].UncoreMultiLimit * BUS_FREQUENCY,
+		System->Package[System->NextPackage].UncoreMultiLimit,
+		BUS_FREQUENCY
+		);
+
 	// set IA dynamic voltage offset
 	UINT64 msr_domain0_VID_program_buffer = (OC_MAILBOX_SET_VID_PARAMS | OC_MAILBOX_DOMAIN_0 | OC_MAILBOX_COMMAND_EXEC) \
 		| kcpu_domain_0_voltage_offset[System->NextPackage] \
@@ -707,68 +769,6 @@ ProgramPackage(
 			);
 	}
 		
-	// set turbo frequency limits
-	UINT64 msr_domain0_clock_program_buffer = System->Package[System->NextPackage].TurboMultiLimit \
-		| System->Package[System->NextPackage].TurboMultiLimit << 8  \
-		| System->Package[System->NextPackage].TurboMultiLimit << 16 \
-		| System->Package[System->NextPackage].TurboMultiLimit << 24 \
-		| System->Package[System->NextPackage].TurboMultiLimit << 32 \
-		| System->Package[System->NextPackage].TurboMultiLimit << 40 \
-		| System->Package[System->NextPackage].TurboMultiLimit << 48 \
-		| System->Package[System->NextPackage].TurboMultiLimit << 56;
-
-	AsmWriteMsr64(
-		MSR_TURBO_RATIO_LIMIT,
-		msr_domain0_clock_program_buffer
-		);
-
-	AsmWriteMsr64(
-		MSR_TURBO_RATIO_LIMIT1,
-		msr_domain0_clock_program_buffer
-		);
-
-	msr_domain0_clock_program_buffer |= MSR_TURBO_RATIO_SEMAPHORE_BIT;
-
-	AsmWriteMsr64(
-		MSR_TURBO_RATIO_LIMIT2,
-		msr_domain0_clock_program_buffer
-		);
-
-	Print(
-		L"Success! Set CPU%d %2dC turbo frequency limit: %d MHz (= %d x %d MHz)\r\n\0",
-		System->NextPackage,
-		System->Platform->Cores[System->NextPackage],
-		System->Package[System->NextPackage].TurboMultiLimit * BUS_FREQUENCY,
-		System->Package[System->NextPackage].TurboMultiLimit,
-		BUS_FREQUENCY
-		);
-
-	// set Uncore frequency limits	
-	msr_ret = AsmReadMsr64(
-		MSR_UNCORE_RATIO_LIMIT
-		);
-
-	UINT64 msr_domain2_clock_program_buffer = (msr_ret & 0xFFFFFFFFFFFFFF00ull) \
-		| System->Package[System->NextPackage].UncoreMultiLimit;
-
-	if (SET_STATIC_UNCORE_FREQ == TRUE) {
-		msr_domain2_clock_program_buffer &= 0xFFFFFFFFFFFF00FFull;
-		msr_domain2_clock_program_buffer |= (System->Package[System->NextPackage].UncoreMultiLimit << 8);
-	}
-
-	AsmWriteMsr64(
-		MSR_UNCORE_RATIO_LIMIT,
-		msr_domain2_clock_program_buffer
-		);
-
-	Print(
-		L"Success! Set CPU%d Uncore frequency limit: %d MHz (= %d x %d MHz)\r\n\0",
-		System->NextPackage,
-		System->Package[System->NextPackage].UncoreMultiLimit * BUS_FREQUENCY,
-		System->Package[System->NextPackage].UncoreMultiLimit,
-		BUS_FREQUENCY
-		);
-
 	// optionally set OC Lock
 	if (SET_OVERCLOCK_LOCK == TRUE) {
 		UINT64 msr_program_buffer;
