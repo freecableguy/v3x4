@@ -5,7 +5,7 @@
 #include <Protocol/MpService.h>
 
 // negative dynamic voltage offsets for all domains
-#define		_no_offset					0		// no change to factory voltage setting
+#define		_no_offset				0			// no change to factory voltage setting
 #define		_neg_10_mV				0xFEC00000		//  -10 mV (-0.010 V)
 #define		_neg_20_mV				0xFD800000		//  -20 mV (-0.020 V)
 #define		_neg_30_mV				0xFC200000		//  -30 mV (-0.030 V)
@@ -357,7 +357,7 @@ InitPlatform(
 				Platform->APICID[System->NextPackage]
 				);
 		}
-
+		
 		System->NextPackage = 0;
 	}
 
@@ -525,7 +525,7 @@ EnumProcessors(
 		if (VERBOSE_OUTPUT == TRUE) {
 			Print(
 				L"\r\n\0"
-			);
+				);
 		}
 		
 		Print(
