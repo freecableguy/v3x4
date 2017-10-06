@@ -17,15 +17,9 @@ Successful use requirements:
 
 - Haswell-E/EP processor (cpuid = 306F2h) or processors. This can be overriden with special build flag at compile time
 
-- CPU microcode revision patch must not be loaded during POST process (requires modified BIOS)
+- CPU microcode revision patch must not be loaded during POST process (requires modified BIOS). Instructions on how to modify BIOS ROM image to remove microcode for external SPI programming will *not* be provided here
 
--- Instructions on how to modify BIOS ROM image to remove microcode for external SPI programming will *not* be provided here
-
-- Use EFI Shellx64 or other suitable UEFI shell to set automatic load (and execution) of v3x4.efi during system boot
-
--- Use cmd ' bcfg driver add 0 fs1:\EFI\Boot\v3x4.efi "V3 Full Turbo" ' where 'fs1:\EFI\Boot\v3x4.efi' is path to DXE driver file on UEFI boot partition (use cmd 'mountvol x: /s' to mount in Windows as drive X: for writing) {Note: there is a bug which prevents accessing the mounted drive through File Explorer in Windows 10 RS2. Workaround is to open Task Manager and use new process launch dialog to navigate to mounted drive and copy directly}
-
--- Toggle enable/disable in BIOS (if presented as an option; default: enabled)
+- Use EFI Shellx64 or other suitable UEFI shell to set automatic load (and execution) of v3x4.efi during system boot.  Use cmd ' bcfg driver add 0 fs1:\EFI\Boot\v3x4.efi "V3 Full Turbo" ' where 'fs1:\EFI\Boot\v3x4.efi' is path to DXE driver file on UEFI boot partition (use cmd 'mountvol x: /s' to mount in Windows as drive X: for writing) {Note: there is a bug which prevents accessing the mounted drive through File Explorer in Windows 10 RS2. Workaround is to open Task Manager and use new process launch dialog to navigate to mounted drive and copy directly}. Toggle enable/disable in BIOS (if presented as an option; default: enabled)
 
 "Features:"
 - Programming MSRs can be a fickle thing... you may see BSOD during boot immediately following toggle enable/disable or other situations where you attempt to write to locked MSRs during runtime (e.g. in OS).  Don't panic... a cold reboot is often the cure
