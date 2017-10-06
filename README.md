@@ -5,13 +5,13 @@ Description:
 
 - Programs Haswell-E/EP Xeon(R) processors (cpuid = 306F2h) on X99 (single) and C612 (dual) platforms to allow for maximum all-core turbo boost for all cores regardless of whether there are motherboard options present for overclocking/voltage control or not. For example, the 18-core Xeon(R) E5-2696 v3 processor has set from the factory an all-core turbo of 2.8GHz. This driver programs the highest un-fused ratio (i.e. the 1C Turbo bin) as the new Turbo bin for all boost configurations including all-core turbo. In other words, the 1C turbo bin becomes the all-core turbo bin and the E5-2696 v3 processor now demonstrates an all-core turbo of 3.8GHz!
 
-- Allows for per-package, dynamic undervolting (retains PCU control while applying a fixed negative Vcore offset) IA (i.e. Core), CLR (CBo/LLC/Ring) a.k.a Uncore voltage domains independently which provides for higher all-core sustained clocks during heavy workloads, including AVX2 workloads.
+- Allows for per-package, dynamic undervolting (retains PCU control while applying a fixed negative Vcore offset) IA (i.e. Core), CLR (CBo/LLC/Ring) a.k.a Uncore voltage domains independently which provides for higher all-core sustained clocks during heavy workloads, including AVX2 workloads
 
-- Allows for setting static Uncore ratio for maximum performance (lowest typical access latency and accompanying maximum throughput) or setting to limit less than maximum (typical 30x). It is possible to trade cache speed for Core speed and studies show that 100MHz of Core speed-up is roughly equivalent to 1000MHz of cache speed-up. That being said, lowering your Uncore power budget to make it to that next-higher Core speed bin is often a worthwhile trade-off.
+- Allows for setting static Uncore ratio for maximum performance (lowest typical access latency and accompanying maximum throughput) or setting to limit less than maximum (typical 30x). It is possible to trade cache speed for Core speed and studies show that 100MHz of Core speed-up is roughly equivalent to 1000MHz of cache speed-up. That being said, lowering your Uncore power budget to make it to that next-higher Core speed bin is often a worthwhile trade-off
 
-- Driver is designed to work on up to 8-way SMP system. Verified functional on multiple 1-way and 2-way systems with accompanying modified BIOS (remove any microcode revision update patches).
+- Driver is designed to work on up to 8-way SMP system. Verified functional on multiple 1-way and 2-way systems with accompanying modified BIOS (remove any microcode revision update patches)
 
-- May work for other Intel Xeon processor types/steppings including Broadwell-E/EP (untested as of yet), and possibly even SKY-E/EP (also, untested as of yet).
+- May work for other Intel Xeon processor types/steppings including Broadwell-E/EP (untested as of yet), and possibly even SKY-E/EP (also, untested as of yet)
 
 Successful use requirements:
 
