@@ -512,7 +512,7 @@ GetPackageCaps(
 			return EFI_ABORTED;
 		}
 
-		Package[System->NextPackage].Turbo1CMulti = msr_ret & 0x00000000000000FFull;
+		Package[System->NextPackage].Turbo1CMulti = msr_ret & 0xFF;
 
 		// set turbo multi limit
 		if (LIMIT_TURBO_MULTI > Package[System->NextPackage].Turbo1CMulti) {
@@ -536,7 +536,7 @@ GetPackageCaps(
 			MSR_UNCORE_RATIO_LIMIT
 			);
 
-		Package[System->NextPackage].MinUncoreMulti = (msr_ret & 0x000000000000FF00ull) >> 8;
+		Package[System->NextPackage].MinUncoreMulti = (msr_ret >> 8) & 0xFF;
 		
 		// get maximum Uncore multiplier
 		AsmWriteMsr64(
@@ -557,7 +557,7 @@ GetPackageCaps(
 			return EFI_ABORTED;
 		}
 
-		Package[System->NextPackage].MaxUncoreMulti = msr_ret & 0x00000000000000FFull;
+		Package[System->NextPackage].MaxUncoreMulti = msr_ret & 0xFF;
 		
 		// set Uncore multi limit
 		if (LIMIT_UNCORE_MUTLI > Package[System->NextPackage].MaxUncoreMulti) {
