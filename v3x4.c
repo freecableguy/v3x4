@@ -5,46 +5,46 @@
 #include <Protocol/MpService.h>
 
 // SVID fixed voltages
-#define		_default_SVID				0x0000074D			// no change to default VCCIN
-#define		_pos_1600_mV				0x00000667			// 1.600 V
-#define		_pos_1625_mV				0x00000680			// 1.625 V
-#define		_pos_1650_mV				0x0000069A			// 1.650 V
-#define		_pos_1675_mV				0x000006B4			// 1.675 V
-#define		_pos_1700_mV				0x000006CD			// 1.700 V
-#define		_pos_1725_mV				0x000006E7			// 1.725 V
-#define		_pos_1750_mV				0x00000700			// 1.750 V
-#define		_pos_1775_mV				0x0000071A			// 1.775 V
-#define		_pos_1800_mV				0x00000734			// 1.800 V
-#define		_pos_1825_mV				0x0000074D			// 1.825 V (default)
-#define		_pos_1850_mV				0x00000767			// 1.850 V
-#define		_pos_1875_mV				0x00000780			// 1.875 V
-#define		_pos_1900_mV				0x0000079A			// 1.900 V
-#define		_pos_1925_mV				0x000007B4			// 1.925 V
-#define		_pos_1950_mV				0x000007CD			// 1.950 V
-#define		_pos_1975_mV				0x000007E7			// 1.975 V
-#define		_pos_2000_mV				0x00000800			// 2.000 V
-#define		_pos_2025_mV				0x0000081A			// 2.025 V
-#define		_pos_2050_mV				0x00000834			// 2.050 V
-#define		_pos_2075_mV				0x0000084D			// 2.075 V
-#define		_pos_2100_mV				0x00000867			// 2.100 V
+#define		_default_SVID				0x0000074D		// no change to default VCCIN
+#define		_pos_1600_mV				0x00000667		// 1.600 V
+#define		_pos_1625_mV				0x00000680		// 1.625 V
+#define		_pos_1650_mV				0x0000069A		// 1.650 V
+#define		_pos_1675_mV				0x000006B4		// 1.675 V
+#define		_pos_1700_mV				0x000006CD		// 1.700 V
+#define		_pos_1725_mV				0x000006E7		// 1.725 V
+#define		_pos_1750_mV				0x00000700		// 1.750 V
+#define		_pos_1775_mV				0x0000071A		// 1.775 V
+#define		_pos_1800_mV				0x00000734		// 1.800 V
+#define		_pos_1825_mV				0x0000074D		// 1.825 V (default)
+#define		_pos_1850_mV				0x00000767		// 1.850 V
+#define		_pos_1875_mV				0x00000780		// 1.875 V
+#define		_pos_1900_mV				0x0000079A		// 1.900 V
+#define		_pos_1925_mV				0x000007B4		// 1.925 V
+#define		_pos_1950_mV				0x000007CD		// 1.950 V
+#define		_pos_1975_mV				0x000007E7		// 1.975 V
+#define		_pos_2000_mV				0x00000800		// 2.000 V
+#define		_pos_2025_mV				0x0000081A		// 2.025 V
+#define		_pos_2050_mV				0x00000834		// 2.050 V
+#define		_pos_2075_mV				0x0000084D		// 2.075 V
+#define		_pos_2100_mV				0x00000867		// 2.100 V
 
 // negative Adaptive voltage offsets for all domains
-#define		_default_FVID				0x0				// no change to default VID (Vcore)
-#define		_neg_10_mV				0xFEC00000			// -10 mV  (-0.010 V)
-#define		_neg_20_mV				0xFD800000			// -20 mV  (-0.020 V)
-#define		_neg_30_mV				0xFC200000			// -30 mV  (-0.030 V)
-#define		_neg_40_mV				0xFAE00000			// -40 mV  (-0.040 V)
-#define		_neg_50_mV				0xF9A00000			// -50 mV  (-0.050 V)
-#define		_neg_60_mV				0xF8600000			// -60 mV  (-0.060 V)
-#define		_neg_70_mV				0xF7000000			// -70 mV  (-0.070 V)
-#define		_neg_80_mV				0xF5C00000			// -80 mV  (-0.080 V)
-#define		_neg_90_mV				0xF4800000			// -90 mV  (-0.090 V)
-#define		_neg_100_mV				0xF3400000			// -100 mV (-0.100 V)
-#define		_neg_110_mV				0xF1E00000			// -110 mV (-0.110 V)
-#define		_neg_120_mV				0xF0A00000			// -120 mV (-0.120 V)
-#define		_neg_130_mV				0xEF600000			// -130 mV (-0.130 V)
-#define		_neg_140_mV				0xEE200000			// -140 mV (-0.140 V)
-#define		_neg_150_mV				0xECC00000			// -150 mV (-0.150 V)
+#define		_default_FVID				0x0			// no change to default VID (Vcore)
+#define		_neg_10_mV				0xFEC00000		// -10 mV  (-0.010 V)
+#define		_neg_20_mV				0xFD800000		// -20 mV  (-0.020 V)
+#define		_neg_30_mV				0xFC200000		// -30 mV  (-0.030 V)
+#define		_neg_40_mV				0xFAE00000		// -40 mV  (-0.040 V)
+#define		_neg_50_mV				0xF9A00000		// -50 mV  (-0.050 V)
+#define		_neg_60_mV				0xF8600000		// -60 mV  (-0.060 V)
+#define		_neg_70_mV				0xF7000000		// -70 mV  (-0.070 V)
+#define		_neg_80_mV				0xF5C00000		// -80 mV  (-0.080 V)
+#define		_neg_90_mV				0xF4800000		// -90 mV  (-0.090 V)
+#define		_neg_100_mV				0xF3400000		// -100 mV (-0.100 V)
+#define		_neg_110_mV				0xF1E00000		// -110 mV (-0.110 V)
+#define		_neg_120_mV				0xF0A00000		// -120 mV (-0.120 V)
+#define		_neg_130_mV				0xEF600000		// -130 mV (-0.130 V)
+#define		_neg_140_mV				0xEE200000		// -140 mV (-0.140 V)
+#define		_neg_150_mV				0xECC00000		// -150 mV (-0.150 V)
 
 // Model Specific Registers
 #define		MSR_IA32_BIOS_SIGN_ID			0x08B
@@ -69,40 +69,40 @@
 #define		OC_MAILBOX_GET_FIVR_PARAMS		0x0000001400000000
 #define		OC_MAILBOX_SET_FIVR_PARAMS		0x0000001500000000
 
-#define		OC_MAILBOX_DOMAIN_0			0x0000000000000000		// IA Core domain
+#define		OC_MAILBOX_DOMAIN_0			0x0000000000000000	// IA Core domain
 #define		OC_MAILBOX_DOMAIN_1			0x0000010000000000
-#define		OC_MAILBOX_DOMAIN_2			0x0000020000000000		// CLR (CBo/LLC/Ring) a.k.a. Cache/Uncore domain
+#define		OC_MAILBOX_DOMAIN_2			0x0000020000000000	// CLR (CBo/LLC/Ring) a.k.a. Cache/Uncore domain
 #define		OC_MAILBOX_DOMAIN_3			0x0000030000000000
 #define		OC_MAILBOX_DOMAIN_4			0x0000040000000000
 #define		OC_MAILBOX_DOMAIN_5			0x0000050000000000
 
-#define		OC_MAILBOX_DISABLE_FIVR_FAULTS		0x1				// bit 0
-#define		OC_MAILBOX_DISABLE_FIVR_EFF_MGMNT	0x2				// bit 1
-#define		OC_MAILBOX_DISABLE_FIVR_SVID_CONTROL	0x80000000			// bit 31
+#define		OC_MAILBOX_DISABLE_FIVR_FAULTS		0x1			// bit 0
+#define		OC_MAILBOX_DISABLE_FIVR_EFF_MGMNT	0x2			// bit 1
+#define		OC_MAILBOX_DISABLE_FIVR_SVID_CONTROL	0x80000000		// bit 31
 
 // constants
-#define		BUS_FREQUENCY				100				// TO DO: placeholder for BCLK sense
-#define		AP_EXEC_TIMEOUT				1000000				// 1 second
+#define		BUS_FREQUENCY				100			// TO DO: placeholder for BCLK sense
+#define		AP_EXEC_TIMEOUT				1000000			// 1 second
 #define		CPUID_VERSION_INFO			0x1
 #define		CPUID_BRAND_STRING_BASE			0x80000002
 #define		CPUID_BRAND_STRING_LEN			0x30
-#define		MSR_FLEX_RATIO_OC_LOCK_BIT		0x100000			// bit 20, set to lock MSR 0x194
-#define		MSR_TURBO_RATIO_SEMAPHORE_BIT		0x8000000000000000		// set to execute changes writen to MSR 0x1AD, 0x1AE, 0x1AF
+#define		MSR_FLEX_RATIO_OC_LOCK_BIT		0x100000		// bit 20, set to lock MSR 0x194
+#define		MSR_TURBO_RATIO_SEMAPHORE_BIT		0x8000000000000000	// set to execute changes writen to MSR 0x1AD, 0x1AE, 0x1AF
 
 // build options
-#define		BUILD_VER				L"v0.1b-rc5"			// build version
-#define		TARGET_CPU_DESC				L"Haswell-E/EP Xeon v3"		// target CPU
-#define		TARGET_CPU_CPUID_SIGN			0x306F2				// target cpuid, set 0xFFFFFFFF to bypass checking
-#define		MAX_PACKAGE_COUNT			2				// maximum number of supported packages/sockets, increase as needed
+#define		BUILD_VER				L"v0.1b-rc5"		// build version
+#define		TARGET_CPU_DESC				L"Haswell-E/EP Xeon v3"	// target CPU
+#define		TARGET_CPU_CPUID_SIGN			0x306F2			// target cpuid, set 0xFFFFFFFF to bypass checking
+#define		MAX_PACKAGE_COUNT			2			// maximum number of supported packages/sockets, increase as needed
 
 // driver settings
-const UINTN		LIMIT_TURBO_MULTI		= 0;				// 0 for auto-max Core turbo multiplier, not to exceed fused limit, no less than MFM
-const UINTN		LIMIT_UNCORE_MUTLI		= 0;				// 0 for auto-max Uncore multiplier, not to exceed fused limit, no less than 12
-const BOOLEAN	DISABLE_UNCORE_PM			= FALSE;			// disable Uncore power managemenet, i.e. force frequency to remain at max
-const BOOLEAN	DISABLE_FIVR_FAULTS			= TRUE;				// disable FIVR Faults (cold boot required for reset)
-const BOOLEAN	DISABLE_FIVR_EFF_MGMNT			= TRUE;				// disable FIVR Efficiency Management (cold boot required for reset)
-const BOOLEAN	DISABLE_FIVR_SVID_CONTROL		= TRUE;				// disable FIVR SVID bus control and program fixed voltage (cold boot required for reset)
-const BOOLEAN	SET_OVERCLOCK_LOCK			= TRUE;				// set OC Lock Bit at completion of programming (recommended)
+const UINTN	LIMIT_TURBO_MULTI			= 0;			// 0 for auto-max Core turbo multiplier, not to exceed fused limit, no less than MFM
+const UINTN	LIMIT_UNCORE_MUTLI			= 0;			// 0 for auto-max Uncore multiplier, not to exceed fused limit, no less than 12
+const BOOLEAN	DISABLE_UNCORE_PM			= FALSE;		// disable Uncore power managemenet, i.e. force frequency to remain at max
+const BOOLEAN	DISABLE_FIVR_FAULTS			= TRUE;			// disable FIVR Faults (cold boot required for reset)
+const BOOLEAN	DISABLE_FIVR_EFF_MGMNT			= TRUE;			// disable FIVR Efficiency Management (cold boot required for reset)
+const BOOLEAN	DISABLE_FIVR_SVID_CONTROL		= TRUE;			// disable FIVR SVID bus control and program fixed voltage (cold boot required for reset)
+const BOOLEAN	SET_OVERCLOCK_LOCK			= TRUE;			// set OC Lock Bit at completion of programming (recommended)
 
 // Serial Voltage Identification (SVID) fixed voltages per package, adjust as needed
 const UINT32 ksvid_static_voltage[MAX_PACKAGE_COUNT] \
@@ -118,37 +118,37 @@ const UINT32 kclr_domain2_voltage_offset[MAX_PACKAGE_COUNT] \
 
 // object structures
 typedef struct _PLATFORM_OBJECT {
-	UINTN					Packages;				// number of physical processor packages
-	UINTN					LogicalProcessors;			// total number of logical processors
-	UINTN					EnabledLogicalProcessors;		// total number of enabled logical processors
-	CHAR16					Specification[MAX_PACKAGE_COUNT][98];	// processor brand name
-	UINTN					Cores[MAX_PACKAGE_COUNT];		// number cores in package
-	UINTN					Threads[MAX_PACKAGE_COUNT];		// number threads in package
-	UINTN					APICID[MAX_PACKAGE_COUNT];		// logical processor number for first core/thread in package (i.e. APIC ID)
+	UINTN			Packages;					// number of physical processor packages
+	UINTN			LogicalProcessors;				// total number of logical processors
+	UINTN			EnabledLogicalProcessors;			// total number of enabled logical processors
+	CHAR16			Specification[MAX_PACKAGE_COUNT][98];		// processor brand name
+	UINTN			Cores[MAX_PACKAGE_COUNT];			// number cores in package
+	UINTN			Threads[MAX_PACKAGE_COUNT];			// number threads in package
+	UINTN			APICID[MAX_PACKAGE_COUNT];			// logical processor number for first core/thread in package (i.e. APIC ID)
 } PLATFORM_OBJECT, *PPLATFORM_OBJECT;
 
 typedef struct _PACKAGE_OBJECT {
-	UINT32					CPUID;					// cpuid
-	UINTN					MFMMulti;				// Minimum Frequency Mode (MFM) or Low Power Mode (LPM) multiplier
-	UINTN					LFMMulti;				// Low Frequency Mode (LFM) multiplier, min non-turbo Core multiplier
-	UINTN					HFMMulti;				// High Frequecy Mode (HFM) multiplier, max non-turbo Core multiplier
-	UINTN					Turbo1CMulti;				// maximum (1C) Core turbo multiplier
-	UINTN					TurboMultiLimit;			// highest allowed turbo mulitplier
-	UINTN					MinUncoreMulti;				// minimum Uncore multiplier
-	UINTN					MaxUncoreMulti;				// maximum Uncore multiplier
-	UINTN					UncoreMultiLimit;			// highest allowed Uncore multiplier
+	UINT32			CPUID;						// cpuid
+	UINTN			MFMMulti;					// Minimum Frequency Mode (MFM) or Low Power Mode (LPM) multiplier
+	UINTN			LFMMulti;					// Low Frequency Mode (LFM) multiplier, min non-turbo Core multiplier
+	UINTN			HFMMulti;					// High Frequecy Mode (HFM) multiplier, max non-turbo Core multiplier
+	UINTN			Turbo1CMulti;					// maximum (1C) Core turbo multiplier
+	UINTN			TurboMultiLimit;				// highest allowed turbo mulitplier
+	UINTN			MinUncoreMulti;					// minimum Uncore multiplier
+	UINTN			MaxUncoreMulti;					// maximum Uncore multiplier
+	UINTN			UncoreMultiLimit;				// highest allowed Uncore multiplier
 } PACKAGE_OBJECT, *PPACKAGE_OBJECT;
 
 typedef struct _SYSTEM_OBJECT {
-	PPLATFORM_OBJECT		Platform;					// Platform object
-	PPACKAGE_OBJECT			Package;					// MAX_PACKAGE_COUNT size array of Package objects dynamically built at runtime
-	UINTN					BootstrapProcessor;			// bootstrap processor (BSP) assignment at driver entry
-	UINTN					NextPackage;				// package number of next Package to be programmed
+	PPLATFORM_OBJECT	Platform;					// Platform object
+	PPACKAGE_OBJECT		Package;					// MAX_PACKAGE_COUNT size array of Package objects dynamically built at runtime
+	UINTN			BootstrapProcessor;				// bootstrap processor (BSP) assignment at driver entry
+	UINTN			NextPackage;					// package number of next Package to be programmed
 } SYSTEM_OBJECT, *PSYSTEM_OBJECT;
 
 // global variables
-EFI_MP_SERVICES_PROTOCOL	*MpServicesProtocol;					// MP Services Protocol handle
-SYSTEM_OBJECT				*System;					// global ptr to base System object
+EFI_MP_SERVICES_PROTOCOL	*MpServicesProtocol;				// MP Services Protocol handle
+SYSTEM_OBJECT			*System;					// global ptr to base System object
 
 // function prototypes
 EFI_STATUS	EFIAPI EnumProcessors(IN OUT PPLATFORM_OBJECT *PlatformObject);
