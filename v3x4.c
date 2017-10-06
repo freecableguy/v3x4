@@ -98,23 +98,23 @@
 // driver settings
 const UINTN	LIMIT_TURBO_MULTI			= 0;			// 0 for auto-max Core turbo multiplier, not to exceed fused limit, no less than MFM
 const UINTN	LIMIT_UNCORE_MUTLI			= 0;			// 0 for auto-max Uncore multiplier, not to exceed fused limit, no less than 12
-const BOOLEAN	DISABLE_UNCORE_PM			= FALSE;		// disable Uncore power managemenet, i.e. force frequency to remain at max
+const BOOLEAN	DISABLE_UNCORE_PM			= TRUE;			// disable Uncore power managemenet, i.e. force frequency to remain at max
 const BOOLEAN	DISABLE_FIVR_FAULTS			= TRUE;			// disable FIVR Faults (cold boot required for reset)
 const BOOLEAN	DISABLE_FIVR_EFF_MGMNT			= TRUE;			// disable FIVR Efficiency Management (cold boot required for reset)
-const BOOLEAN	DISABLE_FIVR_SVID_CONTROL		= TRUE;			// disable FIVR SVID bus control and program fixed voltage (cold boot required for reset)
+const BOOLEAN	DISABLE_FIVR_SVID_CONTROL		= FALSE;		// disable FIVR SVID bus control and program fixed voltage (cold boot required for reset)
 const BOOLEAN	SET_OVERCLOCK_LOCK			= TRUE;			// set OC Lock Bit at completion of programming (recommended)
 
 // Serial Voltage Identification (SVID) fixed voltages per package, adjust as needed
 const UINT32 ksvid_static_voltage[MAX_PACKAGE_COUNT] \
-	= { _pos_1925_mV, _pos_1925_mV }; // , _default_SVID, _default_SVID, _default_SVID, _default_SVID, _default_SVID, _default_SVID };
+	= { _default_SVID, _default_SVID }; // , _default_SVID, _default_SVID, _default_SVID, _default_SVID, _default_SVID, _default_SVID };
 
 // Domain 0 (IA Core) dynamic voltage offsets per package, adjust as needed
 const UINT32 kiacore_domain0_voltage_offset[MAX_PACKAGE_COUNT] \
-	= { _neg_90_mV, _neg_90_mV }; // , _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID };
+	= { _default_FVID, _default_FVID }; // , _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID };
 
 // Domain 2 (CLR) dynamic voltage offsets per package, adjust as needed
 const UINT32 kclr_domain2_voltage_offset[MAX_PACKAGE_COUNT] \
-	= { _neg_50_mV, _neg_50_mV }; // , _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID };
+	= { _default_FVID, _default_FVID }; // , _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID };
 
 // object structures
 typedef struct _PLATFORM_OBJECT {
