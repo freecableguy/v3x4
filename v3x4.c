@@ -114,7 +114,7 @@ const UINT32 kiacore_domain0_voltage_offset[BUILD_MAX_PACKAGE_COUNT] \
 
 // Domain 2 (CLR) dynamic voltage offsets per package, adjust as needed
 const UINT32 kclr_domain2_voltage_offset[BUILD_MAX_PACKAGE_COUNT] \
-	= { _default_FVID, _ne_default_FVIDg_60_mV }; // , _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID };
+	= { _default_FVID, _default_FVID }; // , _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID, _default_FVID };
 
 // object structures
 typedef struct _PLATFORM_OBJECT {
