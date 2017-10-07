@@ -836,8 +836,7 @@ ProgramPackage(
 	if ((SET_SVID_FIXED_VCCIN == TRUE) \
 		&& ((msr_ret & 0xFFF) == ksvid_static_voltage[System->NextPackage])) {
 		Print(
-			L"Fixed VCCIN already set, skipping...\r\n\0",
-			System->NextPackage
+			L"Fixed VCCIN already set, skipping...\r\n\0"
 			);
 	}
 	else if (SET_SVID_FIXED_VCCIN == TRUE) {
@@ -851,8 +850,7 @@ ProgramPackage(
 			msr_program_buffer |= _default_SVID; // fail safe in case of compile with data not set
 
 			Print(
-				L"[WARNING] No valid VCCIN setpoint value found, using default\r\n\0",
-				System->NextPackage
+				L"[WARNING] No valid VCCIN setpoint value found, using default\r\n\0"
 				);
 		}
 
