@@ -13,7 +13,7 @@ Description:
 
 - Driver is designed to work on up to 8S systems. Verified functional on multiple 1S and 2S systems with accompanying modified BIOS (remove any microcode revision update patches)
 
-- May work for other Intel Xeon processor types/steppings including Broadwell-E/EP (untested as of yet), and possibly even SKY-E/EP (also, untested as of yet)
+- May work for other Intel(R) Xeon(R) processor types/steppings including Broadwell-E/EP (untested as of yet), and possibly even SKY-E/EP (also, untested as of yet)
 
 Successful use requirements:
 
