@@ -39,8 +39,11 @@
 #define		_FVID_MINUS_60_MV			0xF8600000			// -60 mV  (-0.060 V)
 #define		_FVID_MINUS_65_MV			0xF7A00000			// -65 mV  (-0.065 V)
 #define		_FVID_MINUS_70_MV			0xF7000000			// -70 mV  (-0.070 V)
+#define		_FVID_MINUS_71_MV			0xF6E00000			// -71 mV  (-0.071 V)
+#define		_FVID_MINUS_75_MV			0xF6800000			// -75 mV  (-0.075 V)
 #define		_FVID_MINUS_80_MV			0xF5C00000			// -80 mV  (-0.080 V)
 #define		_FVID_MINUS_90_MV			0xF4800000			// -90 mV  (-0.090 V)
+#define		_FVID_MINUS_95_MV			0xF3E00000			// -95 mV  (-0.095 V)
 #define		_FVID_MINUS_100_MV			0xF3400000			// -100 mV (-0.100 V)
 #define		_FVID_MINUS_110_MV			0xF1E00000			// -110 mV (-0.110 V)
 #define		_FVID_MINUS_120_MV			0xF0A00000			// -120 mV (-0.120 V)
@@ -96,7 +99,7 @@
 #define		BUILD_RELEASE_VER			L"v3x4-0.10b-i306f2-rc9"	// build version
 #define		BUILD_TARGET_CPU_DESC			L"\"Haswell-E/EP\""		// target CPU description (codename)
 #define		BUILD_TARGET_CPUID_SIGN			0x306F2				// target CPUID, set 0xFFFFFFFF to bypass checking
-#define		MAX_PACKAGE_COUNT			2				// maximum number of supported packages/sockets, increase as needed
+#define		MAX_PACKAGE_COUNT			4				// maximum number of supported packages/sockets
 
 // driver settings
 const UINTN	CPU_SET_MAX_TURBO_RATIO		=	0;				// 0 for auto max: Core turbo ratio, not to exceed fused limit, no less than MFM
@@ -111,67 +114,70 @@ const BOOLEAN	CPU_SET_OC_LOCK			=	FALSE;				// set Overlocking Lock at completio
 
 // Serial Voltage Identification (SVID) fixed voltages per package, adjust as needed
 const UINT32 SVID_FIXED_VCCIN[MAX_PACKAGE_COUNT] \
-	= { _DEFAULT_SVID, _DEFAULT_SVID }; // , _DEFAULT_SVID, _DEFAULT_SVID };
+	= { _DEFAULT_SVID, _DEFAULT_SVID, _DEFAULT_SVID, _DEFAULT_SVID };
 
 // Domain 0 (IA Core) dynamic voltage offsets per package, adjust as needed
 const UINT32 IACORE_ADAPTIVE_OFFSET[MAX_PACKAGE_COUNT] \
-	= { _DEFAULT_FVID, _DEFAULT_FVID }; // , _DEFAULT_FVID, _DEFAULT_FVID };
+	= { _DEFAULT_FVID, _DEFAULT_FVID, _DEFAULT_FVID, _DEFAULT_FVID };
 
 // Domain 2 (CLR) dynamic voltage offsets per package, adjust as needed
 const UINT32 CLR_ADAPTIVE_OFFSET[MAX_PACKAGE_COUNT] \
-	= { _DEFAULT_FVID, _DEFAULT_FVID }; // , _DEFAULT_FVID, _DEFAULT_FVID };
+	= { _DEFAULT_FVID, _DEFAULT_FVID, _DEFAULT_FVID, _DEFAULT_FVID };
 
 // Domain 3 (SA) dynamic voltage offsets per package, adjust as needed
 const UINT32 SA_ADAPTIVE_OFFSET[MAX_PACKAGE_COUNT] \
-	= { _DEFAULT_FVID, _DEFAULT_FVID }; // , _DEFAULT_FVID, _DEFAULT_FVID };
+	= { _DEFAULT_FVID, _DEFAULT_FVID, _DEFAULT_FVID, _DEFAULT_FVID };
 
-// object structures
-typedef struct _PLATFORM_OBJECT {
-UINTN			Packages;							// number of physical processor packages
-UINTN			LogicalProcessors;						// total number of logical processors
-UINTN			EnabledLogicalProcessors;					// total number of enabled logical processors
-} PLATFORM_OBJECT, *PPLATFORM_OBJECT;
+// objects
+typedef struct _DOMAIN_OBJECT {
+UINT32			OffsetVoltage;							// Adaptive offset voltage
+UINTN			MinRatio;							// min allowable ratio
+UINTN			MaxRatio;							// max fused ratio
+UINTN			FlexRatio;							// max non-turbo ratio (MNTR) aka Flex ratio, High Frequency Mode (HFM) ratio
+UINTN			RatioLimit;							// max allowable ratio
+} DOMAIN_OBJECT, *PDOMAIN_OBJECT;
 
 typedef struct _PACKAGE_OBJECT {
-UINT32			CPUID;								// CPUID
-CHAR16			Specification[128];						// processor specification (brand name)
+DOMAIN_OBJECT		IACore;								// IA Core domain (0)
+DOMAIN_OBJECT		CLR;								// CLR domain (2)
+DOMAIN_OBJECT		SA;								// SA domain (3)
+UINT32			InputVoltage;							// VCCIN
+UINT32			CPUID;								// cpuid
+CHAR16			Specification[128];						// CPU brand name
 UINTN			APICID;								// APIC ID
-UINTN			Cores;								// number of cores in package
-UINTN			Threads;							// number of threads in package
-UINTN			CoreMinRatio;							// Low Frequency Mode (LFM) ratio
-UINTN			CoreFlexRatio;							// max non-turbo ratio (MNTR) aka Flex ratio, High Frequency Mode (HFM) ratio
-UINTN			CoreMaxRatio;							// fused maximum Core ratio aka 1C Turbo ratio
-UINTN			CoreLimitRatio;							// max allowable Core ratio
-UINTN			UncoreMinRatio;							// min Uncore ratio
-UINTN			UncoreMaxRatio;							// fused max Uncore ratio
-UINTN			UncoreLimitRatio;						// max allowable Uncore ratio
+UINTN			Cores;								// core count
+UINTN			Threads;							// thread count
 } PACKAGE_OBJECT, *PPACKAGE_OBJECT;
 
+typedef struct _PLATFORM_OBJECT {
+UINTN			Packages;							// physical processor package count
+UINTN			LogicalProcessors;						// total logical processors
+UINTN			EnabledLogicalProcessors;					// total enabled logical processors
+} PLATFORM_OBJECT, *PPLATFORM_OBJECT;
+
 typedef struct _SYSTEM_OBJECT {
-PPLATFORM_OBJECT	Platform;							// Platform object
 PACKAGE_OBJECT		Package[MAX_PACKAGE_COUNT];					// array of Package objects
-UINTN			ThisPackage;							// package index of current package, used in sequencing of programming, etc.
+PPLATFORM_OBJECT	Platform;							// Platform object
 UINTN			BootstrapProcessor;						// bootstrap processor (BSP) assignment at driver entry
-UINT64			ResponseBuffer;							// global buffer for MSR data reading
-UINT64			ProgramBuffer;							// global buffer for MSR data writing
 BOOLEAN			RebootRequired;							// flag set when reboot required
 } SYSTEM_OBJECT, *PSYSTEM_OBJECT;
 
-// global variables
+// globals
 EFI_MP_SERVICES_PROTOCOL	*MpServicesProtocol;					// MP Services Protocol handle
-PSYSTEM_OBJECT			System;							// global System object
+PSYSTEM_OBJECT			System;							// System object
+UINTN				ThisPackage;						// package index of current package, used in sequencing of programming, etc.
+UINT64				ResponseBuffer;						// general buffer for MSR data reading
+UINT64				ProgramBuffer;						// general buffer for MSR data writing
 
 // function prototypes
 EFI_STATUS	EFIAPI GatherPlatformInfo(IN OUT PPLATFORM_OBJECT *PlatformObject);
 EFI_STATUS  EFIAPI InitializeSystem(IN EFI_SYSTEM_TABLE *SystemTable);
-BOOLEAN		EFIAPI IsMicrocodePatchDone(VOID);
-BOOLEAN		EFIAPI IsValidPackage(VOID);
 EFI_STATUS	EFIAPI EnumeratePackages(VOID);
+BOOLEAN		EFIAPI IsValidPackage(VOID);
 VOID		EFIAPI ProgramPackage(IN OUT VOID *Buffer);
 VOID		EFIAPI FinalizeProgramming(VOID);
 VOID		EFIAPI SetCPUConfiguration(VOID);
 VOID		EFIAPI SetFIVRConfiguration(VOID);
-
 VOID		EFIAPI OC_MAILBOX_DISPATCH(VOID);
 VOID		EFIAPI OC_MAILBOX_REQUEST(VOID);
 BOOLEAN		EFIAPI OC_MAILBOX_CLEANUP(VOID);
@@ -203,11 +209,6 @@ EFIDriverEntry(
 			);
 	}
 	
-	// verify no microcode patch loaded
-	if (IsMicrocodePatchDone()) {
-		goto DriverExit;
-	}
-
 	// initialize system data
 	if (EFI_ERROR(InitializeSystem(SystemTable))) {
 		goto DriverExit;
@@ -224,9 +225,9 @@ EFIDriverEntry(
 	}
 
 	// program packages
-	for (System->ThisPackage ; System->ThisPackage < System->Platform->Packages; System->ThisPackage++) {
+	for (ThisPackage; ThisPackage < System->Platform->Packages; ThisPackage++) {
 		// program CPU using current AP if same as current BSP
-		if (System->BootstrapProcessor == System->Package[System->ThisPackage].APICID) {
+		if (System->BootstrapProcessor == System->Package[ThisPackage].APICID) {
 			ProgramPackage(
 				NULL
 				);			
@@ -236,7 +237,7 @@ EFIDriverEntry(
 			status = MpServicesProtocol->StartupThisAP(
 				MpServicesProtocol,
 				ProgramPackage,
-				System->Package[System->ThisPackage].APICID,
+				System->Package[ThisPackage].APICID,
 				NULL,
 				AP_EXEC_TIMEOUT,
 				NULL,
@@ -246,7 +247,7 @@ EFIDriverEntry(
 			if (EFI_ERROR(status)) {
 				Print(
 					L"[WARNING] Failed to startup programming AP on CPU%d (%r)\r\n\0",
-					System->ThisPackage,
+					ThisPackage,
 					status
 					);
 			}
@@ -255,6 +256,7 @@ EFIDriverEntry(
 	
 DriverExit:
 		
+	// notify if system reboot required
 	if (System->RebootRequired == TRUE) {
 		Print(
 			L"!!! REBOOT REQUIRED FOR SOME SETTINGS TO TAKE EFFECT !!!\r\n\0"
@@ -414,38 +416,40 @@ EnumeratePackages(
 
 		// last logical processor
 		if (thread_index == (System->Platform->LogicalProcessors - 1)) {
-			System->Package[System->ThisPackage].Threads = thread_counter;
+			System->Package[ThisPackage].Threads = thread_counter;
 
-			System->Package[System->ThisPackage].Cores = System->Package[System->ThisPackage].Threads / (htt_enabled + 1);
+			System->Package[ThisPackage].Cores = System->Package[ThisPackage].Threads / (htt_enabled + 1);
 
-			System->Package[System->ThisPackage].APICID = (thread_index - thread_counter) + 1;
+			System->Package[ThisPackage].APICID = (thread_index - thread_counter) + 1;
 
 			break;
 		}
 	
 		// package ID changes -> new package found
-		if (processor_info.Location.Package != System->ThisPackage) {
-			System->Package[System->ThisPackage].Threads = thread_counter - 1;
+		if (processor_info.Location.Package != ThisPackage) {
+			System->Package[ThisPackage].Threads = thread_counter - 1;
 
-			System->Package[System->ThisPackage].Cores = System->Package[System->ThisPackage].Threads / (htt_enabled + 1);
+			System->Package[ThisPackage].Cores = System->Package[ThisPackage].Threads / (htt_enabled + 1);
 			
-			System->Package[System->ThisPackage].APICID = (thread_index - thread_counter) + 1;
+			System->Package[ThisPackage].APICID = (thread_index - thread_counter) + 1;
 			
-			System->ThisPackage++;
+			ThisPackage++;
 
 			thread_counter = 1;
 		}
 	}
 
-	// reset counter
-	System->ThisPackage = 0;
+	ThisPackage = 0;
 	
 	// initialize processor data
-	for (System->ThisPackage; System->ThisPackage < System->Platform->Packages; System->ThisPackage++) {
+	for (ThisPackage; ThisPackage < System->Platform->Packages; ThisPackage++) {
+		// VCCIN
+		System->Package[ThisPackage].InputVoltage = SVID_FIXED_VCCIN[ThisPackage];		
+		
 		// CPUID
 		AsmCpuid(
 			CPUID_VERSION_INFO,
-			&System->Package[System->ThisPackage].CPUID,
+			&System->Package[ThisPackage].CPUID,
 			NULL,
 			NULL,
 			NULL
@@ -479,29 +483,32 @@ EnumeratePackages(
 		// convert ASCII to Unicode
 		AsciiStrToUnicodeStrS(
 			processor_brand_string_buffer,
-			System->Package[System->ThisPackage].Specification,
+			System->Package[ThisPackage].Specification,
 			CPUID_BRAND_STRING_LEN + 1
 			);
 
 		Print(
-			L"CPU%d: %s [ %dC/%dT ]\r\n\0",
-			System->ThisPackage,
-			System->Package[System->ThisPackage].Specification,
-			System->Package[System->ThisPackage].Cores,
-			System->Package[System->ThisPackage].Threads
+			L"CPU%d: %s (%dC/%dT)\r\n\0",
+			ThisPackage,
+			System->Package[ThisPackage].Specification,
+			System->Package[ThisPackage].Cores,
+			System->Package[ThisPackage].Threads
 			);
-				
-		// get non-turbo multipliers
-		System->ResponseBuffer = AsmReadMsr64(
+		
+		// IA Core offset voltage
+		System->Package[ThisPackage].IACore.OffsetVoltage = IACORE_ADAPTIVE_OFFSET[ThisPackage];
+
+		// IA Core min ratio, flex ratio
+		ResponseBuffer = AsmReadMsr64(
 			MSR_PLATFORM_INFO
 			);
 
-		System->Package[System->ThisPackage].CoreMinRatio = (System->ResponseBuffer >> 40) & 0xFF;
+		System->Package[ThisPackage].IACore.MinRatio = (ResponseBuffer >> 40) & 0xFF;
 		
-		System->Package[System->ThisPackage].CoreFlexRatio = (System->ResponseBuffer >> 8) & 0xFF;
+		System->Package[ThisPackage].IACore.FlexRatio = (ResponseBuffer >> 8) & 0xFF;
 
-		// get maximum (1C) Core turbo multiplier
-		System->ProgramBuffer = OC_MB_GET_CPU_CAPS \
+		// IA Core max ratio
+		ProgramBuffer = OC_MB_GET_CPU_CAPS \
 			| OC_MB_DOMAIN_IACORE \
 			| OC_MB_COMMAND_EXEC;
 		
@@ -515,34 +522,37 @@ EnumeratePackages(
 			return EFI_ABORTED;
 		}
 
-		System->Package[System->ThisPackage].CoreMaxRatio = System->ResponseBuffer & 0xFF;
+		System->Package[ThisPackage].IACore.MaxRatio = ResponseBuffer & 0xFF;
 
-		// set turbo multi limit
-		if (CPU_SET_MAX_TURBO_RATIO > System->Package[System->ThisPackage].CoreMaxRatio) {
-			System->Package[System->ThisPackage].CoreLimitRatio = System->Package[System->ThisPackage].CoreMaxRatio;
+		// IA Core ratio limit
+		if (CPU_SET_MAX_TURBO_RATIO > System->Package[ThisPackage].IACore.MaxRatio) {
+			System->Package[ThisPackage].IACore.RatioLimit = System->Package[ThisPackage].IACore.MaxRatio;
 		}
 
-		if ((CPU_SET_MAX_TURBO_RATIO < System->Package[System->ThisPackage].CoreMinRatio) \
+		if ((CPU_SET_MAX_TURBO_RATIO < System->Package[ThisPackage].IACore.MinRatio) \
 			&& (CPU_SET_MAX_TURBO_RATIO != 0)) {
-			System->Package[System->ThisPackage].CoreLimitRatio = System->Package[System->ThisPackage].CoreMinRatio;
+			System->Package[ThisPackage].IACore.RatioLimit = System->Package[ThisPackage].IACore.MinRatio;
 		}
 
 		if (CPU_SET_MAX_TURBO_RATIO == 0) {
-			System->Package[System->ThisPackage].CoreLimitRatio = System->Package[System->ThisPackage].CoreMaxRatio;
+			System->Package[ThisPackage].IACore.RatioLimit = System->Package[ThisPackage].IACore.MaxRatio;
 		}
 		else {
-			System->Package[System->ThisPackage].CoreLimitRatio = CPU_SET_MAX_TURBO_RATIO;
+			System->Package[ThisPackage].IACore.RatioLimit = CPU_SET_MAX_TURBO_RATIO;
 		}
 
-		// get minimum Uncore multiplier
-		System->ResponseBuffer = AsmReadMsr64(
+		// CLR offset voltage
+		System->Package[ThisPackage].CLR.OffsetVoltage = CLR_ADAPTIVE_OFFSET[ThisPackage];
+		
+		// CLR min ratio
+		ResponseBuffer = AsmReadMsr64(
 			MSR_UNCORE_RATIO_LIMIT
 			);
 
-		System->Package[System->ThisPackage].UncoreMinRatio = (System->ResponseBuffer >> 8) & 0xFF;
+		System->Package[ThisPackage].CLR.MinRatio = (ResponseBuffer >> 8) & 0xFF;
 		
-		// get maximum Uncore multiplier
-		System->ProgramBuffer = OC_MB_GET_CPU_CAPS \
+		// CLR max ratio
+		ProgramBuffer = OC_MB_GET_CPU_CAPS \
 			| OC_MB_DOMAIN_CLR \
 			| OC_MB_COMMAND_EXEC;
 		
@@ -556,39 +566,73 @@ EnumeratePackages(
 			return EFI_ABORTED;
 		}
 
-		System->Package[System->ThisPackage].UncoreMaxRatio = System->ResponseBuffer & 0xFF;
+		System->Package[ThisPackage].CLR.MaxRatio = ResponseBuffer & 0xFF;
 		
-		// set Uncore multi limit
-		if (CPU_SET_MAX_UNCORE_RATIO > System->Package[System->ThisPackage].UncoreMaxRatio) {
-			System->Package[System->ThisPackage].UncoreLimitRatio = System->Package[System->ThisPackage].UncoreMaxRatio;
+		// CLR ratio limit
+		if (CPU_SET_MAX_UNCORE_RATIO > System->Package[ThisPackage].CLR.MaxRatio) {
+			System->Package[ThisPackage].CLR.RatioLimit = System->Package[ThisPackage].CLR.MaxRatio;
 		}
 	
-		if ((CPU_SET_MAX_UNCORE_RATIO < System->Package[System->ThisPackage].UncoreMinRatio) \
+		if ((CPU_SET_MAX_UNCORE_RATIO < System->Package[ThisPackage].CLR.MinRatio) \
 			&& (CPU_SET_MAX_UNCORE_RATIO != 0)) {
-			System->Package[System->ThisPackage].UncoreLimitRatio = System->Package[System->ThisPackage].UncoreMinRatio;
+			System->Package[ThisPackage].CLR.RatioLimit = System->Package[ThisPackage].CLR.MinRatio;
 		}
 	
 		if (CPU_SET_MAX_UNCORE_RATIO == 0) {
-			System->Package[System->ThisPackage].UncoreLimitRatio = System->Package[System->ThisPackage].UncoreMaxRatio;
+			System->Package[ThisPackage].CLR.RatioLimit = System->Package[ThisPackage].CLR.MaxRatio;
 		}
 		else {
-			System->Package[System->ThisPackage].UncoreLimitRatio = CPU_SET_MAX_UNCORE_RATIO;
+			System->Package[ThisPackage].CLR.RatioLimit = CPU_SET_MAX_UNCORE_RATIO;
 		}
+
+		// SA offset voltage
+		System->Package[ThisPackage].SA.OffsetVoltage = SA_ADAPTIVE_OFFSET[ThisPackage];
 	}
 
-	System->ThisPackage = 0;
+	ThisPackage = 0;
 
 	return EFI_SUCCESS;
 }
 
 BOOLEAN
 EFIAPI
-IsMicrocodePatchDone(
+IsValidPackage(
 	VOID
 ) {
+	Print(
+		L"Validating CPU%d for programming... \r\n\0",
+		ThisPackage
+		);
+
+	// ensure package CPUID matches build target CPUID or override set
+	if ((System->Package[ThisPackage].CPUID != BUILD_TARGET_CPUID_SIGN) \
+		&& (BUILD_TARGET_CPUID_SIGN != 0xFFFFFFFF)) {
+		Print(
+			L"[FAILURE] CPUID (0x%x) does not match target CPUID: 0x%x\r\n\0",
+			System->Package[ThisPackage].CPUID,
+			BUILD_TARGET_CPUID_SIGN
+			);
+
+		return FALSE;
+	}
+
+	// check OC Lock Bit not set
+	ResponseBuffer = AsmReadMsr64(
+		MSR_FLEX_RATIO
+		);
+
+	if ((ResponseBuffer & MSR_FLEX_RATIO_OC_LOCK_BIT) == MSR_FLEX_RATIO_OC_LOCK_BIT) {
+		Print(
+			L"[FAILURE] Overclock enable lock bit (MSR 0x194[20]) set\r\n\0"
+			);
+
+		return FALSE;
+	}
+
+	// verify no processor microcode revision patch loaded
 	AsmWriteMsr64(
 		MSR_IA32_BIOS_SIGN_ID,
-		0x0
+		0
 		);
 
 	AsmCpuid(
@@ -599,53 +643,14 @@ IsMicrocodePatchDone(
 		NULL
 		);
 
-	System->ResponseBuffer = AsmReadMsr64(
+	ResponseBuffer = AsmReadMsr64(
 		MSR_IA32_BIOS_SIGN_ID
 		);
 
-	// high word contains microcode update revision patch level
-	if (((System->ResponseBuffer >> 32) & 0xFF) != MSR_BIOS_NO_UCODE_PATCH) {
+	if (((ResponseBuffer >> 32) & 0xFF) != MSR_BIOS_NO_UCODE_PATCH) {
 		Print(
 			L"[FAILURE] Processor microcode update revision detected\r\n\0"
-			);
-
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-BOOLEAN
-EFIAPI
-IsValidPackage(
-	VOID
-) {
-	Print(
-		L"Validating CPU%d for programming... \r\n\0",
-		System->ThisPackage
 		);
-
-	// verify package CPUID matchs build target CPUID
-	if ((System->Package[System->ThisPackage].CPUID != BUILD_TARGET_CPUID_SIGN) \
-		&& (BUILD_TARGET_CPUID_SIGN != 0xFFFFFFFF)) {
-		Print(
-			L"[FAILURE] CPUID (0x%x) does not match target CPUID: 0x%x\r\n\0",
-			System->Package[System->ThisPackage].CPUID,
-			BUILD_TARGET_CPUID_SIGN
-			);
-
-		return FALSE;
-	}
-
-	// check OC Lock Bit not set
-	System->ResponseBuffer = AsmReadMsr64(
-		MSR_FLEX_RATIO
-		);
-
-	if ((System->ResponseBuffer & MSR_FLEX_RATIO_OC_LOCK_BIT) == MSR_FLEX_RATIO_OC_LOCK_BIT) {
-		Print(
-			L"[FAILURE] Overclock enable lock bit (MSR 0x194[20]) set\r\n\0"
-			);
 
 		return FALSE;
 	}
@@ -659,16 +664,18 @@ EFIAPI
 ProgramPackage(
 	IN OUT VOID *Buffer
 ) {	
-	// validate package for programming
+	// validate package can be programmed
 	if (IsValidPackage()) {
-		// Turbo ratios
+		// CPU Configuration
 		SetCPUConfiguration();
 
 		// FVIR Configuration
 		SetFIVRConfiguration();
 
 		// OC Lock Bit
-		FinalizeProgramming();
+		if (CPU_SET_OC_LOCK == TRUE) {
+			FinalizeProgramming();
+		}
 	}
 
 	return;
@@ -680,66 +687,66 @@ SetCPUConfiguration(
 	VOID
 ) {
 	// CPU Max Core Ratio
-	System->ProgramBuffer = System->Package[System->ThisPackage].CoreLimitRatio \
-		| (System->Package[System->ThisPackage].CoreLimitRatio << 8)  \
-		| (System->Package[System->ThisPackage].CoreLimitRatio << 16) \
-		| (System->Package[System->ThisPackage].CoreLimitRatio << 24) \
-		| (System->Package[System->ThisPackage].CoreLimitRatio << 32) \
-		| (System->Package[System->ThisPackage].CoreLimitRatio << 40) \
-		| (System->Package[System->ThisPackage].CoreLimitRatio << 48) \
-		| (System->Package[System->ThisPackage].CoreLimitRatio << 56);
+	ProgramBuffer = System->Package[ThisPackage].IACore.RatioLimit \
+		| (System->Package[ThisPackage].IACore.RatioLimit << 8)  \
+		| (System->Package[ThisPackage].IACore.RatioLimit << 16) \
+		| (System->Package[ThisPackage].IACore.RatioLimit << 24) \
+		| (System->Package[ThisPackage].IACore.RatioLimit << 32) \
+		| (System->Package[ThisPackage].IACore.RatioLimit << 40) \
+		| (System->Package[ThisPackage].IACore.RatioLimit << 48) \
+		| (System->Package[ThisPackage].IACore.RatioLimit << 56);
 
 	Print(
 		L"Programming maximum %dC Core turbo ratio (%dx)\r\n\0",
-		System->Package[System->ThisPackage].Cores,
-		System->Package[System->ThisPackage].CoreLimitRatio
+		System->Package[ThisPackage].Cores,
+		System->Package[ThisPackage].IACore.RatioLimit
 		);
 
 	AsmWriteMsr64(
 		MSR_TURBO_RATIO_LIMIT,
-		System->ProgramBuffer
+		ProgramBuffer
 		);
 
 	AsmWriteMsr64(
 		MSR_TURBO_RATIO_LIMIT1,
-		System->ProgramBuffer
+		ProgramBuffer
 		);
 
-	System->ProgramBuffer |= MSR_TURBO_RATIO_SEMAPHORE_BIT;
+	ProgramBuffer |= MSR_TURBO_RATIO_SEMAPHORE_BIT;
 
 	AsmWriteMsr64(
 		MSR_TURBO_RATIO_LIMIT2,
-		System->ProgramBuffer
+		ProgramBuffer
 		);
 
 	// CPU Cache Ratio, Min CPU Cache Ratio
-	System->ResponseBuffer = AsmReadMsr64(
+	ResponseBuffer = AsmReadMsr64(
 		MSR_UNCORE_RATIO_LIMIT
 		);
 
-	System->ProgramBuffer = (System->ResponseBuffer & 0xFFFFFFFFFFFFFF00) \
-		| System->Package[System->ThisPackage].UncoreLimitRatio;
+	ProgramBuffer = (ResponseBuffer & 0xFFFFFFFFFFFFFF00) \
+		| System->Package[ThisPackage].CLR.RatioLimit;
 
 	if (UNCORE_PERF_PLIMIT_OVRD_EN == TRUE) {
 		Print(
 			L"Disabling Uncore P-states, setting fixed Uncore ratio (%dx)\r\n\0",
-			System->Package[System->ThisPackage].UncoreLimitRatio
+			System->Package[ThisPackage].CLR.RatioLimit
 			);
 
-		System->ProgramBuffer &= 0xFFFFFFFFFFFF00FF;
+		ProgramBuffer &= 0xFFFFFFFFFFFF00FF;
 
-		System->ProgramBuffer |= (System->Package[System->ThisPackage].UncoreLimitRatio << 8);
+		ProgramBuffer |= (System->Package[ThisPackage].CLR.RatioLimit << 8);
 	}
 	else {
 		Print(
 			L"Programming maximum allowable Uncore ratio (%dx)\r\n\0",
-			System->Package[System->ThisPackage].UncoreLimitRatio
+			System->Package[ThisPackage].CLR.RatioLimit
 			);
 	}
 
 	AsmWriteMsr64(
 		MSR_UNCORE_RATIO_LIMIT,
-		System->ProgramBuffer
+		ProgramBuffer
 		);
 
 	return;
@@ -755,41 +762,35 @@ SetFIVRConfiguration(
 		);
 
 	// IA Core Adaptive Mode offset voltage
-	if (IACORE_ADAPTIVE_OFFSET[System->ThisPackage] != _DEFAULT_FVID) {
-		System->ProgramBuffer = OC_MB_SET_FVIDS_RATIOS \
-			| IACORE_ADAPTIVE_OFFSET[System->ThisPackage] \
-			| System->Package[System->ThisPackage].CoreMaxRatio \
+	if (System->Package[ThisPackage].IACore.OffsetVoltage != _DEFAULT_FVID) {
+		ProgramBuffer = OC_MB_SET_FVIDS_RATIOS \
+			| System->Package[ThisPackage].IACore.OffsetVoltage \
+			| System->Package[ThisPackage].IACore.MaxRatio \
 			| OC_MB_DOMAIN_IACORE \
 			| OC_MB_COMMAND_EXEC;
 
 		OC_MAILBOX_DISPATCH();
-
-		OC_MAILBOX_CLEANUP();
 	}
 	
 	// CLR Adaptive Mode voltage offset
-	if (CLR_ADAPTIVE_OFFSET[System->ThisPackage] != _DEFAULT_FVID) {
-		System->ProgramBuffer = OC_MB_SET_FVIDS_RATIOS \
-			| CLR_ADAPTIVE_OFFSET[System->ThisPackage] \
-			| System->Package[System->ThisPackage].UncoreMaxRatio \
+	if (System->Package[ThisPackage].CLR.OffsetVoltage != _DEFAULT_FVID) {
+		ProgramBuffer = OC_MB_SET_FVIDS_RATIOS \
+			| System->Package[ThisPackage].CLR.OffsetVoltage \
+			| System->Package[ThisPackage].CLR.MaxRatio \
 			| OC_MB_DOMAIN_CLR \
 			| OC_MB_COMMAND_EXEC;
 
 		OC_MAILBOX_DISPATCH();
-
-		OC_MAILBOX_CLEANUP();
 	}
 
 	// SA Adaptive Mode voltage offset
-	if (SA_ADAPTIVE_OFFSET[System->ThisPackage] != _DEFAULT_FVID) {
-		System->ProgramBuffer = OC_MB_SET_FVIDS_RATIOS \
-			| SA_ADAPTIVE_OFFSET[System->ThisPackage] \
+	if (System->Package[ThisPackage].SA.OffsetVoltage != _DEFAULT_FVID) {
+		ProgramBuffer = OC_MB_SET_FVIDS_RATIOS \
+			| System->Package[ThisPackage].SA.OffsetVoltage \
 			| OC_MB_DOMAIN_SA \
 			| OC_MB_COMMAND_EXEC;
 
 		OC_MAILBOX_DISPATCH();
-
-		OC_MAILBOX_CLEANUP();
 	}
 
 	// FIRV Faults
@@ -798,14 +799,12 @@ SetFIVRConfiguration(
 			L"Disabling Integrated VR Faults\r\n\0"
 			);
 
-		System->ProgramBuffer = OC_MB_FIVR_FAULTS_OVRD_EN \
+		ProgramBuffer = OC_MB_FIVR_FAULTS_OVRD_EN \
 			| OC_MB_SET_FIVR_PARAMS \
 			| OC_MB_DOMAIN_IACORE \
 			| OC_MB_COMMAND_EXEC;
 
 		OC_MAILBOX_DISPATCH();
-
-		OC_MAILBOX_CLEANUP();
 	}
 
 	// FIVR Efficiency Mode
@@ -814,32 +813,30 @@ SetFIVRConfiguration(
 			L"Disabling Integrated VR Efficiency Mode\r\n\0"
 			);
 
-		System->ProgramBuffer = OC_MB_FIVR_EFF_MODE_OVRD_EN \
+		ProgramBuffer = OC_MB_FIVR_EFF_MODE_OVRD_EN \
 			| OC_MB_SET_FIVR_PARAMS \
 			| OC_MB_DOMAIN_IACORE \
 			| OC_MB_COMMAND_EXEC;
 
 		OC_MAILBOX_DISPATCH();
-
-		OC_MAILBOX_CLEANUP();
 	}
 
 	// Fixed VCCIN, Dynamic SVID Control (PowerCut)
 	if ((CPU_INPUT_VOLT_MODE_FIXED == TRUE) \
 		|| (FIVR_DYN_SVID_CONTROL_DIS == TRUE)) {
-		System->ProgramBuffer = OC_MB_SET_SVID_PARAMS \
-			| SVID_FIXED_VCCIN[System->ThisPackage] \
+		ProgramBuffer = OC_MB_SET_SVID_PARAMS \
+			| System->Package[ThisPackage].InputVoltage \
 			| OC_MB_DOMAIN_IACORE \
 			| OC_MB_COMMAND_EXEC;
 
 		// fail safe in case of compile with no data set
-		if (SVID_FIXED_VCCIN[System->ThisPackage] == _DYNAMIC_SVID) {
+		if (System->Package[ThisPackage].InputVoltage == _DYNAMIC_SVID) {
 			Print(
 				L"[WARNING] Valid VCCIN setpoint not found, using default\r\n\0",
-				System->ThisPackage
+				ThisPackage
 				);
 
-			System->ProgramBuffer |= _DEFAULT_SVID;
+			ProgramBuffer |= _DEFAULT_SVID;
 		}
 
 		// Dynamic SVID Control (PowerCut)
@@ -848,7 +845,7 @@ SetFIVRConfiguration(
 				L"Disabling FIVR Dynamic SVID Control, setting fixed VCCIN\r\n\0"
 				);
 
-			System->ProgramBuffer |= OC_MB_FIVR_DYN_SVID_CONTROL_DIS;
+			ProgramBuffer |= OC_MB_FIVR_DYN_SVID_CONTROL_DIS;
 		}
 		else {
 			Print(
@@ -864,24 +861,22 @@ SetFIVRConfiguration(
 	return;
 }
 
+// prevents any changes to write-once MSR values once set (reboot required to clear)
 VOID
 EFIAPI
 FinalizeProgramming(
 	VOID
 ) {
-	if (CPU_SET_OC_LOCK == TRUE) {
-		System->ResponseBuffer = AsmReadMsr64(
-			MSR_FLEX_RATIO
-			);
+	ResponseBuffer = AsmReadMsr64(
+		MSR_FLEX_RATIO
+		);
 
-		// prevents any changes to write-once MSR values once set (reboot required to clear)
-		System->ProgramBuffer = System->ResponseBuffer | MSR_FLEX_RATIO_OC_LOCK_BIT;
+	ProgramBuffer = ResponseBuffer | MSR_FLEX_RATIO_OC_LOCK_BIT;
 
-		AsmWriteMsr64(
-			MSR_FLEX_RATIO,
-			System->ProgramBuffer
-			);
-	}
+	AsmWriteMsr64(
+		MSR_FLEX_RATIO,
+		ProgramBuffer
+		);
 
 	return;
 }
@@ -891,7 +886,8 @@ EFIAPI
 OC_MAILBOX_REQUEST(
 	VOID
 ) {
-	System->ResponseBuffer = AsmReadMsr64(
+	// read from mailbox
+	ResponseBuffer = AsmReadMsr64(
 		MSR_OC_MAILBOX
 		);
 	
@@ -906,11 +902,11 @@ OC_MAILBOX_DISPATCH(
 	// write to mailbox
 	AsmWriteMsr64(
 		MSR_OC_MAILBOX,
-		System->ProgramBuffer
+		ProgramBuffer
 		);
 
 	// retrieve immediate response from mailbox
-	System->ResponseBuffer = AsmReadMsr64(
+	ResponseBuffer = AsmReadMsr64(
 		MSR_OC_MAILBOX
 		);
 
@@ -923,14 +919,14 @@ OC_MAILBOX_CLEANUP(
 	VOID
 ) {
 	// special case where response indicates reboot is required for setting to take effect
-	if (((System->ResponseBuffer >> 32) & 0xFF) == OC_MB_REBOOT_REQUIRED) {
+	if (((ResponseBuffer >> 32) & 0xFF) == OC_MB_REBOOT_REQUIRED) {
 		System->RebootRequired = TRUE;
 
 		return FALSE;
 	}
 	
 	// if non-zero there was an error
-	if (((System->ResponseBuffer >> 32) & 0xFF) != OC_MB_SUCCESS) {
+	if (((ResponseBuffer >> 32) & 0xFF) != OC_MB_SUCCESS) {
 		return TRUE;
 	}
 
