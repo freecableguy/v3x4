@@ -171,7 +171,7 @@ UINT64				ProgramBuffer;						// general buffer for MSR data writing
 
 // function prototypes
 EFI_STATUS	EFIAPI GatherPlatformInfo(IN OUT PPLATFORM_OBJECT *PlatformObject);
-EFI_STATUS  EFIAPI InitializeSystem(IN EFI_SYSTEM_TABLE *SystemTable);
+EFI_STATUS  	EFIAPI InitializeSystem(IN EFI_SYSTEM_TABLE *SystemTable);
 EFI_STATUS	EFIAPI EnumeratePackages(VOID);
 BOOLEAN		EFIAPI IsValidPackage(VOID);
 VOID		EFIAPI ProgramPackage(IN OUT VOID *Buffer);
