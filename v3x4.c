@@ -375,7 +375,7 @@ GatherPlatformInfo(
 		}
 	}
 
-	Platform->Packages += 1;
+	Platform->Packages++;
 	
 	*PlatformObject = Platform;
 
@@ -833,7 +833,6 @@ SetFIVRConfiguration(
 		if (System->Package[ThisPackage].InputVoltage == _DYNAMIC_SVID) {
 			Print(
 				L"[WARNING] Valid VCCIN setpoint not found, using default\r\n\0",
-				ThisPackage
 				);
 
 			ProgramBuffer |= _DEFAULT_SVID;
