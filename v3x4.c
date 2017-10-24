@@ -650,7 +650,7 @@ IsValidPackage(
 	if (((ResponseBuffer >> 32) & 0xFF) != MSR_BIOS_NO_UCODE_PATCH) {
 		Print(
 			L"[FAILURE] Processor microcode update revision detected\r\n\0"
-		);
+			);
 
 		return FALSE;
 	}
