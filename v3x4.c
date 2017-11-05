@@ -694,6 +694,7 @@ SetCPUConfiguration(
 		System->Package[ThisPackage].IACore.RatioLimit
 		);
 	
+	ProgramBuffer = 0;
 	for (UINTN i = 0; i < 8; i++) {
 		ProgramBuffer |= System->Package[ThisPackage].IACore.RatioLimit << (i*8);
 	}
