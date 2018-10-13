@@ -3,7 +3,7 @@ Intel(R) Xeon(R) Processor Max Effort Turbo Boost UEFI DXE driver
 
 Description:
 
-- Programs Haswell-E/EP Xeon(R) processors (cpuid = 306F2h) on X99 (single) and C612 (dual) platforms to allow for maximum all-core turbo boost for all cores regardless of whether there are motherboard options present for overclocking/voltage control or not. For example, the 18-core Xeon(R) E5-2696 v3 processor has set from the factory an all-core turbo of 2.8GHz. This driver programs the highest un-fused ratio (i.e. the 1C Turbo bin) as the new Turbo bin for all boost configurations including all-core turbo. In other words, the 1C turbo bin becomes the all-core turbo bin and the E5-2696 v3 processor now demonstrates an all-core turbo of 3.8GHz!
+- Programs Haswell-E/EP Xeon(R) processors (cpuid = 306F2h, 306F3h) on X99 (single), C612 (dual), including QUAD (and above) platforms to allow for maximum all-core turbo boost for all cores regardless of whether there are motherboard options present for overclocking/voltage control or not. For example, the 18-core Xeon(R) E5-2696 v3 processor has set from the factory an all-core turbo of 2.8GHz. This driver programs the highest un-fused ratio (i.e. the 1C Turbo bin) as the new Turbo bin for all boost configurations including all-core turbo. In other words, the 1C turbo bin becomes the all-core turbo bin and the E5-2696 v3 processor now demonstrates an all-core turbo of 3.8GHz!
 
 - Allows for per-package, dynamic undervolting (retains PCU control while applying a fixed negative Vcore offset) IA (i.e. Core), CLR (CBo/LLC/Ring) a.k.a Uncore, and System Agent (SA) voltage domains independently which provides for higher all-core sustained clocks during heavy workloads, including AVX2 workloads
 
@@ -11,17 +11,15 @@ Description:
 
 - Allows to disable CPU SVID telemetry (a.k.a. "PowerCut") which may reduce or remove altogether TDP power limitations for some system combinations. Allows to set a fixed VCCIN voltage (not recommended if available to be set in BIOS)
 
-- Driver is designed to work on up to 8S systems. Verified functional on multiple 1S and 2S systems with accompanying modified BIOS (remove any microcode revision update patches)
-
-- May work for other Intel(R) Xeon(R) processor types/steppings including Broadwell-E/EP (untested as of yet), and possibly even SKY-E/EP (also, untested as of yet)
+- Driver is designed to work on up to 8S systems. Verified functional on multiple 1S, 2S, and 4S systems with accompanying modified BIOS (remove any microcode revision update patches)
 
 Successful use requirements:
 
-- Haswell-E/EP processor (cpuid = 306F2h) or processors. This can be overriden with special build flag at compile time
+- Haswell-E/EP processor (cpuid = 306F2h, 306F3h) or processors. This can be overriden with special build flag at compile time
 
 - CPU microcode revision patch must *not* be loaded during POST process (requires modified BIOS). Instructions on how to modify BIOS ROM image to remove microcode for external SPI programming will *not* be provided here
 
-- Use EFI Shellx64 or other suitable UEFI shell to set automatic load (and execution) of v3x4.efi during system boot.  Use cmd ' bcfg driver add 0 fs1:\EFI\Boot\v3x4.efi "V3 Full Turbo" ' where 'fs1:\EFI\Boot\v3x4.efi' is path to DXE driver file on UEFI boot partition (use cmd 'mountvol x: /s' to mount in Windows as drive X: for writing) {Note: there is a bug which prevents accessing the mounted drive through File Explorer in Windows 10 RS2. Workaround is to open Task Manager and use new process launch dialog to navigate to mounted drive and copy directly}. Toggle enable/disable in BIOS (if presented as an option; default: enabled)
+- Use EFI Shellx64 or other suitable UEFI shell to set automatic load (and execution) of v3x4.efi during system boot.  Use cmd ' bcfg driver add 0 fs1:\EFI\Boot\v3x4.efi "V3 Full Turbo" ' where 'fs1:\EFI\Boot\v3x4.efi' is path to DXE driver file on UEFI boot partition (use cmd 'mountvol x: /s' to mount in Windows as drive X: for writing) {Note: there is a bug which prevents accessing the mounted drive through File Explorer in Windows 10 build 1803. Workaround is to open Task Manager and use new process launch dialog to navigate to mounted drive and copy directly}. Toggle enable/disable in BIOS (if presented as an option; default: enabled)
 
 "Features:"
 - If you program too great a negative of an offset voltage for any of the enabled domains, this is the equivalent of setting too low a VID in BIOS and expecting your system to be remain stable. Since this is always done (no recovery), then to recover you would need to temporarily disconnect the disk source for the drive binary (preventing load with automatic bypass). Similiar to the trial-and-error method of overclocking, so will there be here, too
