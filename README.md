@@ -1,5 +1,5 @@
 # v3x4
-Intel(R) Xeon(R) v3 Processor SuperTurbo UEFI DXE driver
+Intel(R) Xeon(R) Processor Max Effort Turbo Boost UEFI DXE driver
 
 Description:
 
