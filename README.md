@@ -6,7 +6,7 @@ Intel(R) Xeon(R) Processor Max Effort Turbo Boost UEFI DXE driver
 
 Description:
 
-- Does the work that Intel refuses to provide. God Wins.
+- Does the work that Intel refuses to provide (say can't be done). God Wins.
 
 - Programs Intel(R) Xeon(R) "Haswell-E/EP(4S)/EX" E5/E7 v3 processors (cpuid = 306F2h, 306F3h, 306F4h) on X99 (single), C612 (dual), including QUAD (C602J?) and ABOVE (presumed up to 8S albeit unverified at this time) platforms to allow for maximum all-core turbo boost for all cores regardless of whether there are motherboard options present for overclocking/voltage control or not. For example, the 18-core Xeon(R) E5-2696 v3 processor has set from the factory an all-core turbo of 2.8GHz. This driver programs the highest un-fused ratio (i.e. the 1C Turbo bin) as the new Turbo bin for all boost configurations including all-core turbo. In other words, the 1C turbo bin becomes the all-core turbo bin and the E5-2696 v3 processor now demonstrates an all-core turbo of 3.8GHz!
 
