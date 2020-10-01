@@ -105,7 +105,7 @@
 #define				BUILD_TARGET_CPUID_SIGN_1		0x306F2				// target CPUID, set 0xFFFFFFFF to bypass checking
 #define				BUILD_TARGET_CPUID_SIGN_2		0x306F3				// target CPUID, set 0xFFFFFFFF to bypass checking
 #define				BUILD_TARGET_CPUID_SIGN_3		0x306F4				// target CPUID, set 0xFFFFFFFF to bypass checking
-#define				MAX_PACKAGE_COUNT			8				// maximum number of supported packages/sockets
+#define				MAX_PACKAGE_COUNT			4				// maximum number of supported packages/sockets
 
 // driver settings
 const UINTN			CPU_SET_MAX_TURBO_RATIO		=	0;				// 0 for auto max: Core turbo ratio, not to exceed fused limit, no less than MFM (8)
