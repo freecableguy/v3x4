@@ -13,6 +13,7 @@ v3x4.c
 MdePkg/MdePkg.dec
 MdeModulePkg/MdeModulePkg.dec
 UefiCpuPkg/UefiCpuPkg.dec
+EmbeddedPkg/EmbeddedPkg.dec
 
 [LibraryClasses]
 BaseLib
